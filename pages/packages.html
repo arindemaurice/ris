@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Internet Packages - RIS</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/security.js"></script>
+
+<script>
+    secureAdminPage();
+    startSecurityMonitor("admin");
+    startActivityTracking("admin");
+</script>
+
+    <style>
+        body {
+            background: #f1f5f9;
+            margin: 0;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .page-header p {
+            margin: 6px 0 0;
+            color: #64748b;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #0f172a;
+            color: white;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .stat-card p {
+            margin: 0 0 7px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .badge-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .toggle-btn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media (max-width: 800px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .page-container {
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<script src="../js/admin-auth.js"></script>
+
+<script>
+    requireAdminLogin();
+</script>
+
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h1>Internet Packages</h1>
+            <p>Create and manage internet packages offered by RIS.</p>
+        </div>
+
+        <a href="admin-dashboard.html" class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <p>Total Packages</p>
+            <h2 id="totalPackages">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Active Packages</p>
+            <h2 id="activePackages">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Inactive Packages</p>
+            <h2 id="inactivePackages">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Highest Speed</p>
+            <h2 id="highestSpeed">0 Mbps</h2>
+        </div>
+
+    </div>
+
+
+    <!-- ADD / EDIT PACKAGE -->
+
+    <div class="panel">
+
+        <h2 id="formTitle">Add Internet Package</h2>
+
+        <form id="packageForm">
+
+            <input type="hidden" id="editId">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Package Name</label>
+                    <input
+                        type="text"
+                        id="packageName"
+                        placeholder="Example: Basic"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Speed (Mbps)</label>
+                    <input
+                        type="number"
+                        id="speed"
+                        min="1"
+                        placeholder="Example: 10"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Price (UGX)</label>
+                    <input
+                        type="number"
+                        id="price"
+                        min="0"
+                        placeholder="Example: 50000"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Validity</label>
+
+                    <select id="validity" required>
+                        <option value="1">1 Day</option>
+                        <option value="7">7 Days</option>
+                        <option value="14">14 Days</option>
+                        <option value="30" selected>30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90">90 Days</option>
+                        <option value="365">365 Days</option>
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select id="status">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveButton"
+                >
+                    Add Package
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="resetForm()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- PACKAGE LIST -->
+
+    <div class="panel">
+
+        <h2>Available Packages</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Speed</th>
+                        <th>Price</th>
+                        <th>Validity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="packageTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const PACKAGE_KEY = "RIS_packages";
+
+
+    function getPackages() {
+
+        return JSON.parse(
+            localStorage.getItem(PACKAGE_KEY)
+        ) || [];
+
+    }
+
+
+    function savePackages(packages) {
+
+        localStorage.setItem(
+            PACKAGE_KEY,
+            JSON.stringify(packages)
+        );
+
+    }
+
+
+    function createId() {
+
+        return "PKG-" +
+            Date.now().toString(36) +
+            Math.random().toString(36).substring(2, 7);
+
+    }
+
+
+    function showMessage(text, type) {
+
+        const message =
+            document.getElementById("message");
+
+        message.textContent = text;
+
+        message.className =
+            "message " + type;
+
+        setTimeout(() => {
+
+            message.className = "message";
+
+        }, 3000);
+
+    }
+
+
+    function initializePackages() {
+
+        let packages = getPackages();
+
+        if (packages.length === 0) {
+
+            packages = [
+
+                {
+                    id: createId(),
+                    name: "Basic",
+                    speed: 5,
+                    price: 30000,
+                    validity: 30,
+                    status: "Active"
+                },
+
+                {
+                    id: createId(),
+                    name: "Standard",
+                    speed: 10,
+                    price: 50000,
+                    validity: 30,
+                    status: "Active"
+                },
+
+                {
+                    id: createId(),
+                    name: "Premium",
+                    speed: 20,
+                    price: 80000,
+                    validity: 30,
+                    status: "Active"
+                },
+
+                {
+                    id: createId(),
+                    name: "Business",
+                    speed: 50,
+                    price: 150000,
+                    validity: 30,
+                    status: "Active"
+                }
+
+            ];
+
+            savePackages(packages);
+
+        }
+
+    }
+
+
+    function updateStats() {
+
+        const packages = getPackages();
+
+        const active =
+            packages.filter(
+                p => p.status === "Active"
+            ).length;
+
+        const inactive =
+            packages.filter(
+                p => p.status === "Inactive"
+            ).length;
+
+        const highest =
+            packages.length
+                ? Math.max(
+                    ...packages.map(
+                        p => Number(p.speed) || 0
+                    )
+                )
+                : 0;
+
+
+        document.getElementById("totalPackages")
+            .textContent = packages.length;
+
+        document.getElementById("activePackages")
+            .textContent = active;
+
+        document.getElementById("inactivePackages")
+            .textContent = inactive;
+
+        document.getElementById("highestSpeed")
+            .textContent = highest + " Mbps";
+
+    }
+
+
+    function renderPackages() {
+
+        const packages = getPackages();
+
+        const table =
+            document.getElementById("packageTable");
+
+
+        if (packages.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">
+                        No packages available.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML = packages.map(packageItem => {
+
+            const statusClass =
+                packageItem.status === "Active"
+                    ? "badge-active"
+                    : "badge-inactive";
+
+
+            return `
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(packageItem.name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${Number(packageItem.speed).toLocaleString()} Mbps
+                    </td>
+
+                    <td>
+                        UGX ${Number(packageItem.price).toLocaleString()}
+                    </td>
+
+                    <td>
+                        ${packageItem.validity} Days
+                    </td>
+
+                    <td>
+                        <span class="badge ${statusClass}">
+                            ${packageItem.status}
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="action-btn edit-btn"
+                            onclick="editPackage('${packageItem.id}')"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="action-btn toggle-btn"
+                            onclick="togglePackage('${packageItem.id}')"
+                        >
+                            ${packageItem.status === "Active"
+                                ? "Disable"
+                                : "Activate"}
+                        </button>
+
+                        <button
+                            class="action-btn delete-btn"
+                            onclick="deletePackage('${packageItem.id}')"
+                        >
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+    }
+
+
+    function editPackage(id) {
+
+        const packages = getPackages();
+
+        const packageItem =
+            packages.find(p => p.id === id);
+
+        if (!packageItem) {
+            return;
+        }
+
+
+        document.getElementById("editId").value =
+            packageItem.id;
+
+        document.getElementById("packageName").value =
+            packageItem.name;
+
+        document.getElementById("speed").value =
+            packageItem.speed;
+
+        document.getElementById("price").value =
+            packageItem.price;
+
+        document.getElementById("validity").value =
+            packageItem.validity;
+
+        document.getElementById("status").value =
+            packageItem.status;
+
+
+        document.getElementById("formTitle").textContent =
+            "Edit Internet Package";
+
+        document.getElementById("saveButton").textContent =
+            "Update Package";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    function togglePackage(id) {
+
+        const packages = getPackages();
+
+        const packageItem =
+            packages.find(p => p.id === id);
+
+        if (!packageItem) {
+            return;
+        }
+
+
+        packageItem.status =
+            packageItem.status === "Active"
+                ? "Inactive"
+                : "Active";
+
+
+        savePackages(packages);
+
+        renderPackages();
+        updateStats();
+
+        showMessage(
+            "Package status updated successfully.",
+            "success"
+        );
+
+    }
+
+
+    function deletePackage(id) {
+
+        const packages = getPackages();
+
+        const packageItem =
+            packages.find(p => p.id === id);
+
+        if (!packageItem) {
+            return;
+        }
+
+
+        const customers =
+            JSON.parse(
+                localStorage.getItem("RIS_customers")
+            ) || [];
+
+
+        const usedByCustomer =
+            customers.some(
+                customer =>
+                    customer.packageId === id
+            );
+
+
+        if (usedByCustomer) {
+
+            alert(
+                "This package is currently assigned to a customer. Disable it instead of deleting it."
+            );
+
+            return;
+
+        }
+
+
+        if (!confirm(
+            "Are you sure you want to delete this package?"
+        )) {
+            return;
+        }
+
+
+        const updated =
+            packages.filter(
+                p => p.id !== id
+            );
+
+
+        savePackages(updated);
+
+        renderPackages();
+        updateStats();
+
+        showMessage(
+            "Package deleted successfully.",
+            "success"
+        );
+
+    }
+
+
+    document
+        .getElementById("packageForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const packages = getPackages();
+
+            const editId =
+                document.getElementById("editId").value;
+
+
+            const name =
+                document.getElementById("packageName")
+                    .value.trim();
+
+            const speed =
+                Number(
+                    document.getElementById("speed").value
+                );
+
+            const price =
+                Number(
+                    document.getElementById("price").value
+                );
+
+            const validity =
+                Number(
+                    document.getElementById("validity").value
+                );
+
+            const status =
+                document.getElementById("status").value;
+
+
+            if (!name || speed <= 0 || price < 0 || validity <= 0) {
+
+                showMessage(
+                    "Please enter valid package information.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const duplicate =
+                packages.find(
+                    p =>
+                        p.name.toLowerCase() ===
+                        name.toLowerCase() &&
+                        p.id !== editId
+                );
+
+
+            if (duplicate) {
+
+                showMessage(
+                    "A package with this name already exists.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (editId) {
+
+                const packageItem =
+                    packages.find(
+                        p => p.id === editId
+                    );
+
+                if (packageItem) {
+
+                    packageItem.name = name;
+                    packageItem.speed = speed;
+                    packageItem.price = price;
+                    packageItem.validity = validity;
+                    packageItem.status = status;
+
+                }
+
+
+                showMessage(
+                    "Package updated successfully.",
+                    "success"
+                );
+
+            } else {
+
+                packages.push({
+
+                    id: createId(),
+                    name: name,
+                    speed: speed,
+                    price: price,
+                    validity: validity,
+                    status: status
+
+                });
+
+
+                showMessage(
+                    "Package added successfully.",
+                    "success"
+                );
+
+            }
+
+
+            savePackages(packages);
+
+            resetForm();
+            renderPackages();
+            updateStats();
+
+        });
+
+
+    function resetForm() {
+
+        document
+            .getElementById("packageForm")
+            .reset();
+
+        document.getElementById("editId").value = "";
+
+        document.getElementById("status").value =
+            "Active";
+
+        document.getElementById("validity").value =
+            "30";
+
+        document.getElementById("formTitle").textContent =
+            "Add Internet Package";
+
+        document.getElementById("saveButton").textContent =
+            "Add Package";
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    initializePackages();
+    renderPackages();
+    updateStats();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>RIS | Payments</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+```
+
+</head>
+
+<body>
+    <script src="../js/admin-auth.js"></script>
+    <script src="../js/security.js"></script>
+
+<script>
+    secureAdminPage();
+    startSecurityMonitor("admin");
+    startActivityTracking("admin");
+</script>
+
+<script>
+    requireAdminLogin();
+</script>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+```
+<div class="logo">
+
+    <h2>R<span>IS</span></h2>
+
+    <small>
+        Reliable Internet Services
+    </small>
+
+</div>
+
+
+<div class="nav-title">
+    Main
+</div>
+
+
+<a href="../index.html" class="nav-link">
+
+    <span class="nav-icon">⌂</span>
+
+    <span>
+        Dashboard
+    </span>
+
+</a>
+
+
+<a href="customers.html" class="nav-link">
+
+    <span class="nav-icon">👥</span>
+
+    <span>
+        Customers
+    </span>
+
+</a>
+
+
+<a href="packages.html" class="nav-link">
+
+    <span class="nav-icon">📦</span>
+
+    <span>
+        Packages
+    </span>
+
+</a>
+
+
+<a href="vouchers.html" class="nav-link">
+
+    <span class="nav-icon">🎟️</span>
+
+    <span>
+        Vouchers
+    </span>
+
+</a>
+
+
+<a href="payments.html" class="nav-link active">
+
+    <span class="nav-icon">💰</span>
+
+    <span>
+        Payments
+    </span>
+
+</a>
+
+
+<div class="nav-title">
+    Network
+</div>
+
+
+<a href="routers.html" class="nav-link">
+
+    <span class="nav-icon">📡</span>
+
+    <span>
+        Routers
+    </span>
+
+</a>
+
+
+<a href="usage.html" class="nav-link">
+
+    <span class="nav-icon">📊</span>
+
+    <span>
+        Usage
+    </span>
+
+</a>
+
+
+<div class="nav-title">
+    Management
+</div>
+
+
+<a href="reports.html" class="nav-link">
+
+    <span class="nav-icon">📈</span>
+
+    <span>
+        Reports
+    </span>
+
+</a>
+
+
+<a href="settings.html" class="nav-link">
+
+    <span class="nav-icon">⚙️</span>
+
+    <span>
+        Settings
+    </span>
+
+</a>
+```
+
+</aside>
+
+<!-- MAIN -->
+
+<main class="main">
+
+<header class="topbar">
+
+```
+<div class="page-title">
+    Payments
+</div>
+
+
+<div class="user-area">
+
+    <div>
+
+        <div class="user-name">
+            Administrator
+        </div>
+
+        <div class="user-role">
+            Super Admin
+        </div>
+
+    </div>
+
+
+    <div class="avatar">
+        A
+    </div>
+
+</div>
+```
+
+</header>
+
+<section class="content">
+
+<div class="toolbar">
+
+```
+<div>
+
+    <h1>
+        Payments & Billing
+    </h1>
+
+    <p style="color:#64748b;margin-top:5px;">
+        Record and manage customer payments.
+    </p>
+
+</div>
+```
+
+</div>
+
+<!-- STATISTICS -->
+
+<div class="stats">
+
+```
+<div class="stat-card">
+
+    <div class="stat-label">
+        Total Payments
+    </div>
+
+    <div
+        class="stat-value"
+        id="totalPayments"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="stat-card">
+
+    <div class="stat-label">
+        Total Revenue
+    </div>
+
+    <div
+        class="stat-value"
+        id="totalRevenue"
+    >
+        UGX 0
+    </div>
+
+</div>
+
+
+<div class="stat-card">
+
+    <div class="stat-label">
+        This Month
+    </div>
+
+    <div
+        class="stat-value"
+        id="monthlyRevenue"
+    >
+        UGX 0
+    </div>
+
+</div>
+
+
+<div class="stat-card">
+
+    <div class="stat-label">
+        Pending
+    </div>
+
+    <div
+        class="stat-value"
+        id="pendingPayments"
+    >
+        0
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- RECORD PAYMENT -->
+
+<div class="card">
+
+<div class="card-header">
+
+```
+<h3>
+    Record Payment
+</h3>
+```
+
+</div>
+
+<div class="card-body">
+
+<div
+    id="message"
+    style="display:none;"
+></div>
+
+<form id="paymentForm">
+
+<div class="form-grid">
+
+```
+<!-- CUSTOMER -->
+
+<div class="form-group">
+
+    <label>
+        Customer *
+    </label>
+
+    <select
+        id="customer"
+        class="form-control"
+        required
+    >
+
+        <option value="">
+            Select customer
+        </option>
+
+    </select>
+
+</div>
+
+
+
+<!-- AMOUNT -->
+
+<div class="form-group">
+
+    <label>
+        Amount (UGX) *
+    </label>
+
+    <input
+        type="number"
+        id="amount"
+        class="form-control"
+        min="0"
+        placeholder="Enter payment amount"
+        required
+    >
+
+</div>
+
+
+
+<!-- METHOD -->
+
+<div class="form-group">
+
+    <label>
+        Payment Method *
+    </label>
+
+    <select
+        id="method"
+        class="form-control"
+        required
+    >
+
+        <option value="">
+            Select payment method
+        </option>
+
+        <option value="Mobile Money">
+            Mobile Money
+        </option>
+
+        <option value="Cash">
+            Cash
+        </option>
+
+        <option value="Bank">
+            Bank
+        </option>
+
+        <option value="Card">
+            Card
+        </option>
+
+        <option value="Other">
+            Other
+        </option>
+
+    </select>
+
+</div>
+
+
+
+<!-- DATE -->
+
+<div class="form-group">
+
+    <label>
+        Payment Date *
+    </label>
+
+    <input
+        type="date"
+        id="paymentDate"
+        class="form-control"
+        required
+    >
+
+</div>
+
+
+
+<!-- REFERENCE -->
+
+<div class="form-group">
+
+    <label>
+        Transaction Reference
+    </label>
+
+    <input
+        type="text"
+        id="reference"
+        class="form-control"
+        placeholder="e.g. MTN123456789"
+    >
+
+</div>
+
+
+
+<!-- STATUS -->
+
+<div class="form-group">
+
+    <label>
+        Payment Status
+    </label>
+
+    <select
+        id="status"
+        class="form-control"
+    >
+
+        <option value="Paid">
+            Paid
+        </option>
+
+        <option value="Pending">
+            Pending
+        </option>
+
+        <option value="Failed">
+            Failed
+        </option>
+
+    </select>
+
+</div>
+
+
+
+<!-- DESCRIPTION -->
+
+<div class="form-group full">
+
+    <label>
+        Description / Notes
+    </label>
+
+    <textarea
+        id="notes"
+        class="form-control"
+        placeholder="Optional payment notes"
+    ></textarea>
+
+</div>
+```
+
+</div>
+
+<div class="form-actions">
+
+```
+<button
+    type="reset"
+    class="btn btn-secondary"
+>
+    Clear
+</button>
+
+
+<button
+    type="submit"
+    class="btn btn-primary"
+>
+    💰 Save Payment
+</button>
+```
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- PAYMENT HISTORY -->
+
+<div class="card">
+
+<div class="card-header">
+
+```
+<h3>
+    Payment History
+</h3>
+
+
+<button
+    class="btn btn-danger btn-small"
+    onclick="deleteAllPayments()"
+>
+    Delete All
+</button>
+```
+
+</div>
+
+<div class="card-body">
+
+<div class="toolbar">
+
+```
+<div class="search-box">
+
+    <span>🔎</span>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search payments..."
+    >
+
+</div>
+
+
+<select
+    id="filterStatus"
+    class="form-control"
+    style="width:170px;"
+>
+
+    <option value="All">
+        All Statuses
+    </option>
+
+    <option value="Paid">
+        Paid
+    </option>
+
+    <option value="Pending">
+        Pending
+    </option>
+
+    <option value="Failed">
+        Failed
+    </option>
+
+</select>
+```
+
+</div>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+```
+<th>Receipt</th>
+
+<th>Customer</th>
+
+<th>Package</th>
+
+<th>Amount</th>
+
+<th>Method</th>
+
+<th>Date</th>
+
+<th>Reference</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+```
+
+</tr>
+
+</thead>
+
+<tbody id="paymentTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script src="../js/app.js"></script>
+
+<script>
+
+
+/* =========================
+   LOAD CUSTOMERS
+========================= */
+
+function loadCustomers() {
+
+    const customers =
+        getData(
+            "RIS_customers",
+            []
+        );
+
+
+    const select =
+        document.getElementById(
+            "customer"
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            Select customer
+        </option>
+
+    `;
+
+
+    customers.forEach(customer => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            customer.id;
+
+
+        option.textContent =
+            `${customer.fullName} — ${customer.phone}`;
+
+
+        option.dataset.price =
+            customer.packagePrice || 0;
+
+
+        option.dataset.package =
+            customer.packageName || "";
+
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+
+/* =========================
+   CUSTOMER SELECTION
+========================= */
+
+document.getElementById(
+    "customer"
+)
+.addEventListener(
+    "change",
+    function() {
+
+        const selected =
+            this.options[
+                this.selectedIndex
+            ];
+
+
+        if (!selected.value) {
+
+            document.getElementById(
+                "amount"
+            ).value = "";
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "amount"
+        ).value =
+            selected.dataset.price || "";
+
+    }
+);
+
+
+
+/* =========================
+   DEFAULT DATE
+========================= */
+
+function setPaymentDate() {
+
+    document.getElementById(
+        "paymentDate"
+    ).value =
+        todayString();
+
+}
+
+
+
+/* =========================
+   GENERATE RECEIPT
+========================= */
+
+function generateReceiptNumber() {
+
+    return generateId("PAY");
+
+}
+
+
+
+/* =========================
+   SAVE PAYMENT
+========================= */
+
+document.getElementById(
+    "paymentForm"
+)
+.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const customerId =
+            document.getElementById(
+                "customer"
+            ).value;
+
+
+        const customer =
+            getCustomerById(
+                customerId
+            );
+
+
+        if (!customer) {
+
+            showMessage(
+                "message",
+                "Please select a valid customer.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+        const amount =
+            Number(
+                document.getElementById(
+                    "amount"
+                ).value
+            );
+
+
+        const method =
+            document.getElementById(
+                "method"
+            ).value;
+
+
+        const paymentDate =
+            document.getElementById(
+                "paymentDate"
+            ).value;
+
+
+        const reference =
+            document.getElementById(
+                "reference"
+            ).value.trim();
+
+
+        const status =
+            document.getElementById(
+                "status"
+            ).value;
+
+
+        const notes =
+            document.getElementById(
+                "notes"
+            ).value.trim();
+
+
+
+        if (amount <= 0) {
+
+            showMessage(
+                "message",
+                "Please enter a valid payment amount.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+        if (!method) {
+
+            showMessage(
+                "message",
+                "Please select a payment method.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+
+        let payments =
+            getData(
+                "RIS_payments",
+                []
+            );
+
+
+        const payment = {
+
+            id:
+                generateId("PAY"),
+
+            receiptNumber:
+                generateReceiptNumber(),
+
+            customerId:
+                customer.id,
+
+            customerName:
+                customer.fullName,
+
+            customerPhone:
+                customer.phone,
+
+            packageName:
+                customer.packageName || "",
+
+            packagePrice:
+                Number(
+                    customer.packagePrice || 0
+                ),
+
+            amount:
+                amount,
+
+            method:
+                method,
+
+            date:
+                paymentDate,
+
+            reference:
+                reference ||
+                generateId("TXN"),
+
+            status:
+                status,
+
+            notes:
+                notes,
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        payments.push(
+            payment
+        );
+
+
+        saveData(
+            "RIS_payments",
+            payments
+        );
+
+
+
+        /* UPDATE CUSTOMER PAYMENT STATUS */
+
+        if (status === "Paid") {
+
+            let customers =
+                getData(
+                    "RIS_customers",
+                    []
+                );
+
+
+            const index =
+                customers.findIndex(
+                    c =>
+                        c.id === customer.id
+                );
+
+
+            if (index !== -1) {
+
+                customers[index]
+                    .paymentStatus =
+                    "Paid";
+
+
+                saveData(
+                    "RIS_customers",
+                    customers
+                );
+
+            }
+
+        }
+
+
+
+        showMessage(
+            "message",
+            `Payment ${payment.receiptNumber} saved successfully.`,
+            "success"
+        );
+
+
+        document.getElementById(
+            "paymentForm"
+        ).reset();
+
+
+        setPaymentDate();
+
+
+        loadPayments();
+
+    }
+);
+
+
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+function paymentStatusClass(status) {
+
+    if (status === "Paid")
+        return "badge-success";
+
+    if (status === "Pending")
+        return "badge-warning";
+
+    if (status === "Failed")
+        return "badge-danger";
+
+    return "badge-gray";
+
+}
+
+
+
+/* =========================
+   LOAD PAYMENTS
+========================= */
+
+function loadPayments() {
+
+    const payments =
+        getData(
+            "RIS_payments",
+            []
+        );
+
+
+    const paidPayments =
+        payments.filter(
+            p => p.status === "Paid"
+        );
+
+
+    const totalRevenue =
+        paidPayments.reduce(
+            (total, payment) =>
+                total +
+                Number(payment.amount || 0),
+            0
+        );
+
+
+    const now =
+        new Date();
+
+
+    const monthlyRevenue =
+        paidPayments
+        .filter(payment => {
+
+            const date =
+                new Date(
+                    payment.date
+                );
+
+
+            return (
+
+                date.getMonth() ===
+                    now.getMonth()
+
+                &&
+
+                date.getFullYear() ===
+                    now.getFullYear()
+
+            );
+
+        })
+        .reduce(
+            (total, payment) =>
+                total +
+                Number(payment.amount || 0),
+            0
+        );
+
+
+    document.getElementById(
+        "totalPayments"
+    ).textContent =
+        payments.length;
+
+
+    document.getElementById(
+        "totalRevenue"
+    ).textContent =
+        formatCurrency(
+            totalRevenue
+        );
+
+
+    document.getElementById(
+        "monthlyRevenue"
+    ).textContent =
+        formatCurrency(
+            monthlyRevenue
+        );
+
+
+    document.getElementById(
+        "pendingPayments"
+    ).textContent =
+        payments.filter(
+            p =>
+                p.status === "Pending"
+        ).length;
+
+
+    renderPayments(
+        payments
+    );
+
+}
+
+
+
+/* =========================
+   RENDER PAYMENTS
+========================= */
+
+function renderPayments(
+    payments
+) {
+
+    const search =
+        document.getElementById(
+            "search"
+        )
+        .value
+        .toLowerCase();
+
+
+    const filter =
+        document.getElementById(
+            "filterStatus"
+        )
+        .value;
+
+
+    const filtered =
+        payments.filter(
+            payment => {
+
+                const matchesSearch =
+
+                    (
+                        payment.customerName
+                        || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (
+                        payment.receiptNumber
+                        || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    (
+                        payment.reference
+                        || ""
+                    )
+                    .toLowerCase()
+                    .includes(search);
+
+
+                const matchesFilter =
+
+                    filter === "All"
+
+                    ||
+
+                    payment.status ===
+                        filter;
+
+
+                return (
+                    matchesSearch &&
+                    matchesFilter
+                );
+
+            }
+        );
+
+
+    const table =
+        document.getElementById(
+            "paymentTable"
+        );
+
+
+    if (filtered.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="9">
+
+                    <div class="empty">
+
+                        <h3>
+                            No payments found
+                        </h3>
+
+                        <p>
+                            Payment records will appear here.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        filtered
+        .slice()
+        .reverse()
+        .map(
+            payment => `
+
+            <tr>
+
+                <td class="code">
+                    ${payment.receiptNumber}
+                </td>
+
+                <td>
+                    <strong>
+                        ${payment.customerName}
+                    </strong>
+                    <br>
+                    <small>
+                        ${payment.customerPhone || ""}
+                    </small>
+                </td>
+
+                <td>
+                    ${payment.packageName || "-"}
+                </td>
+
+                <td>
+                    <strong>
+                        ${formatCurrency(
+                            payment.amount
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+                    ${payment.method}
+                </td>
+
+                <td>
+                    ${formatDate(
+                        payment.date
+                    )}
+                </td>
+
+                <td class="code">
+                    ${payment.reference}
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        paymentStatusClass(
+                            payment.status
+                        )
+                    }">
+
+                        ${payment.status}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-danger btn-small"
+                        onclick="deletePayment('${payment.id}')"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `
+        )
+        .join("");
+
+}
+
+
+
+/* =========================
+   DELETE PAYMENT
+========================= */
+
+function deletePayment(id) {
+
+    if (
+        !confirmDelete(
+            "Delete this payment?"
+        )
+    ) {
+        return;
+    }
+
+
+    let payments =
+        getData(
+            "RIS_payments",
+            []
+        );
+
+
+    payments =
+        payments.filter(
+            payment =>
+                payment.id !== id
+        );
+
+
+    saveData(
+        "RIS_payments",
+        payments
+    );
+
+
+    loadPayments();
+
+}
+
+
+
+/* =========================
+   DELETE ALL
+========================= */
+
+function deleteAllPayments() {
+
+    if (
+        !confirmDelete(
+            "Delete ALL payment records? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+
+    saveData(
+        "RIS_payments",
+        []
+    );
+
+
+    loadPayments();
+
+}
+
+
+
+/* =========================
+   SEARCH
+========================= */
+
+document.getElementById(
+    "search"
+)
+.addEventListener(
+    "input",
+    function() {
+
+        const payments =
+            getData(
+                "RIS_payments",
+                []
+            );
+
+        renderPayments(
+            payments
+        );
+
+    }
+);
+
+
+
+/* =========================
+   FILTER
+========================= */
+
+document.getElementById(
+    "filterStatus"
+)
+.addEventListener(
+    "change",
+    function() {
+
+        const payments =
+            getData(
+                "RIS_payments",
+                []
+            );
+
+        renderPayments(
+            payments
+        );
+
+    }
+);
+
+
+
+/* =========================
+   START
+========================= */
+
+loadCustomers();
+
+setPaymentDate();
+
+loadPayments();
+
+
+</script>
+
+</body>
+
+</html>
