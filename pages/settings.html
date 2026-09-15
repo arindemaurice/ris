@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | RIS</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .settings-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 25px;
+        }
+
+        .settings-header h1 {
+            margin-bottom: 5px;
+        }
+
+        .settings-header p {
+            color: #64748b;
+        }
+
+        .settings-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .settings-card h2 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .settings-card > p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+        }
+
+        .save-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .danger-zone {
+            border: 1px solid #fecaca;
+        }
+
+        .danger-zone h2 {
+            color: #b91c1c;
+        }
+
+        .danger-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .danger-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .danger-btn:hover {
+            background: #b91c1c;
+        }
+
+        .warning-box {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            padding: 15px;
+            border-radius: 8px;
+            color: #9a3412;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .password-note {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="settings-container">
+
+        <div class="settings-header">
+            <h1>System Settings</h1>
+            <p>Manage your RIS business information, preferences and security.</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+
+        <!-- BUSINESS INFORMATION -->
+
+        <div class="settings-card">
+
+            <h2>Business Information</h2>
+            <p>Information displayed throughout your RIS system.</p>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="businessName">Business Name</label>
+                    <input
+                        type="text"
+                        id="businessName"
+                        placeholder="Reliable Internet Services">
+                </div>
+
+                <div class="form-group">
+                    <label for="businessPhone">Phone Number</label>
+                    <input
+                        type="text"
+                        id="businessPhone"
+                        placeholder="+256 700 000000">
+                </div>
+
+                <div class="form-group">
+                    <label for="businessEmail">Email</label>
+                    <input
+                        type="email"
+                        id="businessEmail"
+                        placeholder="info@ris.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="currency">Currency</label>
+
+                    <select id="currency">
+                        <option value="UGX">UGX - Ugandan Shilling</option>
+                        <option value="USD">USD - US Dollar</option>
+                        <option value="KES">KES - Kenyan Shilling</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group full">
+                    <label for="businessAddress">Business Address</label>
+
+                    <input
+                        type="text"
+                        id="businessAddress"
+                        placeholder="Kampala, Uganda">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM PREFERENCES -->
+
+        <div class="settings-card">
+
+            <h2>System Preferences</h2>
+            <p>Configure default behaviour for your RIS system.</p>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="defaultCustomerStatus">
+                        Default Customer Status
+                    </label>
+
+                    <select id="defaultCustomerStatus">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="defaultPaymentStatus">
+                        Default Payment Status
+                    </label>
+
+                    <select id="defaultPaymentStatus">
+
+                        <option value="Unpaid">
+                            Unpaid
+                        </option>
+
+                        <option value="Paid">
+                            Paid
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="sessionTimeout">
+                        Admin Session Timeout
+                    </label>
+
+                    <select id="sessionTimeout">
+
+                        <option value="15">
+                            15 Minutes
+                        </option>
+
+                        <option value="30">
+                            30 Minutes
+                        </option>
+
+                        <option value="60">
+                            1 Hour
+                        </option>
+
+                        <option value="120">
+                            2 Hours
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="timezone">
+                        Time Zone
+                    </label>
+
+                    <select id="timezone">
+
+                        <option value="Africa/Kampala">
+                            Africa/Kampala
+                        </option>
+
+                        <option value="Africa/Nairobi">
+                            Africa/Nairobi
+                        </option>
+
+                        <option value="UTC">
+                            UTC
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button
+                type="button"
+                class="save-btn"
+                onclick="saveSettings()">
+
+                Save Settings
+
+            </button>
+
+        </div>
+
+
+        <!-- ADMIN ACCOUNT -->
+
+        <div class="settings-card">
+
+            <h2>Admin Account</h2>
+            <p>Change the administrator login credentials.</p>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="adminUsername">
+                        Admin Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adminUsername"
+                        placeholder="admin">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="currentPassword">
+                        Current Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="currentPassword"
+                        placeholder="Current password">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="newPassword">
+                        New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="newPassword"
+                        placeholder="New password">
+
+                    <span class="password-note">
+                        Minimum 6 characters.
+                    </span>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm new password">
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button
+                type="button"
+                class="save-btn"
+                onclick="changeAdminPassword()">
+
+                Update Admin Account
+
+            </button>
+
+        </div>
+
+
+        <!-- DATA MANAGEMENT -->
+
+        <div class="settings-card danger-zone">
+
+            <h2>Data Management</h2>
+
+            <p>
+                These actions affect data stored in this browser.
+                Use them carefully.
+            </p>
+
+            <div class="warning-box">
+
+                ⚠️ <strong>Prototype warning:</strong>
+                RIS currently stores its data in browser localStorage.
+                Clearing browser data can remove your records.
+
+            </div>
+
+            <div class="danger-actions">
+
+                <button
+                    class="danger-btn"
+                    onclick="resetPackages()">
+
+                    Reset Packages
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    onclick="clearVouchers()">
+
+                    Clear Vouchers
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    onclick="clearPayments()">
+
+                    Clear Payments
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    onclick="clearUsage()">
+
+                    Clear Usage
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    onclick="clearCustomers()">
+
+                    Clear Customers
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    onclick="resetEverything()">
+
+                    Reset Entire RIS
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ADMIN SECURITY -->
+
+<script src="../js/admin-auth.js"></script>
+<script src="../js/security.js"></script>
+
+<script>
+
+    requireAdminLogin();
+
+    secureAdminPage();
+
+    startSecurityMonitor("admin");
+
+    startActivityTracking("admin");
+
+
+    /* =====================================================
+       DEFAULT SETTINGS
+    ===================================================== */
+
+    const DEFAULT_SETTINGS = {
+
+        businessName: "Reliable Internet Services",
+
+        businessPhone: "",
+
+        businessEmail: "",
+
+        businessAddress: "Kampala, Uganda",
+
+        currency: "UGX",
+
+        defaultCustomerStatus: "Active",
+
+        defaultPaymentStatus: "Unpaid",
+
+        sessionTimeout: "30",
+
+        timezone: "Africa/Kampala"
+
+    };
+
+
+    function getSettings() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem("RIS_settings")
+            ) || DEFAULT_SETTINGS;
+
+        } catch (error) {
+
+            return DEFAULT_SETTINGS;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LOAD SETTINGS
+    ===================================================== */
+
+    function loadSettings() {
+
+        const settings = getSettings();
+
+
+        document.getElementById("businessName").value =
+            settings.businessName || "";
+
+
+        document.getElementById("businessPhone").value =
+            settings.businessPhone || "";
+
+
+        document.getElementById("businessEmail").value =
+            settings.businessEmail || "";
+
+
+        document.getElementById("businessAddress").value =
+            settings.businessAddress || "";
+
+
+        document.getElementById("currency").value =
+            settings.currency || "UGX";
+
+
+        document.getElementById("defaultCustomerStatus").value =
+            settings.defaultCustomerStatus || "Active";
+
+
+        document.getElementById("defaultPaymentStatus").value =
+            settings.defaultPaymentStatus || "Unpaid";
+
+
+        document.getElementById("sessionTimeout").value =
+            settings.sessionTimeout || "30";
+
+
+        document.getElementById("timezone").value =
+            settings.timezone || "Africa/Kampala";
+
+
+        document.getElementById("adminUsername").value =
+            localStorage.getItem("RIS_admin_username") || "admin";
+
+    }
+
+
+    /* =====================================================
+       SAVE SETTINGS
+    ===================================================== */
+
+    function saveSettings() {
+
+        const settings = {
+
+            businessName:
+                document.getElementById("businessName").value.trim(),
+
+            businessPhone:
+                document.getElementById("businessPhone").value.trim(),
+
+            businessEmail:
+                document.getElementById("businessEmail").value.trim(),
+
+            businessAddress:
+                document.getElementById("businessAddress").value.trim(),
+
+            currency:
+                document.getElementById("currency").value,
+
+            defaultCustomerStatus:
+                document.getElementById("defaultCustomerStatus").value,
+
+            defaultPaymentStatus:
+                document.getElementById("defaultPaymentStatus").value,
+
+            sessionTimeout:
+                document.getElementById("sessionTimeout").value,
+
+            timezone:
+                document.getElementById("timezone").value
+
+        };
+
+
+        if (!settings.businessName) {
+
+            showMessage(
+                "Business name is required.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        localStorage.setItem(
+            "RIS_settings",
+            JSON.stringify(settings)
+        );
+
+
+        showMessage(
+            "Settings saved successfully.",
+            "success"
+        );
+
+    }
+
+
+    /* =====================================================
+       CHANGE ADMIN ACCOUNT
+    ===================================================== */
+
+    function changeAdminPassword() {
+
+        const username =
+            document.getElementById("adminUsername").value.trim();
+
+        const currentPassword =
+            document.getElementById("currentPassword").value;
+
+        const newPassword =
+            document.getElementById("newPassword").value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+
+        if (!username) {
+
+            showMessage(
+                "Admin username is required.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const storedUsername =
+            localStorage.getItem("RIS_admin_username") || "admin";
+
+        const storedPassword =
+            localStorage.getItem("RIS_admin_password") || "admin123";
+
+
+        if (
+            username !== storedUsername &&
+            currentPassword !== storedPassword
+        ) {
+
+            showMessage(
+                "Enter the correct current password before changing the username.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            currentPassword &&
+            currentPassword !== storedPassword
+        ) {
+
+            showMessage(
+                "Current password is incorrect.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (newPassword && newPassword.length < 6) {
+
+            showMessage(
+                "New password must contain at least 6 characters.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (newPassword !== confirmPassword) {
+
+            showMessage(
+                "New passwords do not match.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        localStorage.setItem(
+            "RIS_admin_username",
+            username
+        );
+
+
+        if (newPassword) {
+
+            localStorage.setItem(
+                "RIS_admin_password",
+                newPassword
+            );
+
+        }
+
+
+        showMessage(
+            "Admin account updated successfully.",
+            "success"
+        );
+
+
+        document.getElementById("currentPassword").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+
+    }
+
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    function showMessage(message, type) {
+
+        const element =
+            document.getElementById("message");
+
+        element.textContent = message;
+
+        element.className =
+            "message " + type;
+
+
+        setTimeout(function() {
+
+            element.className = "message";
+
+        }, 4000);
+
+    }
+
+
+    /* =====================================================
+       RESET PACKAGES
+    ===================================================== */
+
+    function resetPackages() {
+
+        if (!confirm(
+            "Reset packages to the default RIS packages?"
+        )) {
+            return;
+        }
+
+        localStorage.removeItem("RIS_packages");
+
+        if (typeof initializePackages === "function") {
+            initializePackages();
+        }
+
+        showMessage(
+            "Packages have been reset.",
+            "success"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLEAR VOUCHERS
+    ===================================================== */
+
+    function clearVouchers() {
+
+        if (!confirm(
+            "Delete ALL vouchers?"
+        )) {
+            return;
+        }
+
+        localStorage.removeItem("RIS_vouchers");
+
+        showMessage(
+            "All vouchers have been deleted.",
+            "success"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLEAR PAYMENTS
+    ===================================================== */
+
+    function clearPayments() {
+
+        if (!confirm(
+            "Delete ALL payment records?"
+        )) {
+            return;
+        }
+
+        localStorage.removeItem("RIS_payments");
+
+        showMessage(
+            "All payment records have been deleted.",
+            "success"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLEAR USAGE
+    ===================================================== */
+
+    function clearUsage() {
+
+        if (!confirm(
+            "Delete ALL usage records?"
+        )) {
+            return;
+        }
+
+        localStorage.removeItem("RIS_usage");
+
+        showMessage(
+            "All usage records have been deleted.",
+            "success"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLEAR CUSTOMERS
+    ===================================================== */
+
+    function clearCustomers() {
+
+        if (!confirm(
+            "Delete ALL customers? This cannot be undone."
+        )) {
+            return;
+        }
+
+        localStorage.removeItem("RIS_customers");
+
+        showMessage(
+            "All customers have been deleted.",
+            "success"
+        );
+
+    }
+
+
+    /* =====================================================
+       RESET EVERYTHING
+    ===================================================== */
+
+    function resetEverything() {
+
+        const confirmed = confirm(
+            "WARNING!\n\n" +
+            "This will delete customers, packages, vouchers, " +
+            "payments, routers, usage and settings.\n\n" +
+            "Are you sure?"
+        );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const secondConfirm = confirm(
+            "This is the FINAL confirmation. " +
+            "Reset the entire RIS system?"
+        );
+
+
+        if (!secondConfirm) {
+            return;
+        }
+
+
+        localStorage.removeItem("RIS_customers");
+        localStorage.removeItem("RIS_packages");
+        localStorage.removeItem("RIS_vouchers");
+        localStorage.removeItem("RIS_payments");
+        localStorage.removeItem("RIS_routers");
+        localStorage.removeItem("RIS_usage");
+        localStorage.removeItem("RIS_settings");
+
+
+        if (typeof initializePackages === "function") {
+            initializePackages();
+        }
+
+
+        alert(
+            "RIS has been reset. The page will reload."
+        );
+
+
+        window.location.reload();
+
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadSettings
+    );
+
+</script>
+
+</body>
+</html>
