@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - RIS</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 18px;
+            padding: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            background: #2563eb;
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .logo-area h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .logo-area p {
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .demo-login {
+            margin-top: 22px;
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 9px;
+            font-size: 13px;
+            color: #475569;
+            text-align: center;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="logo-area">
+            <div class="logo">RIS</div>
+            <h1>Admin Login</h1>
+            <p>Reliable Internet Services</p>
+        </div>
+
+        <div id="loginMessage" class="message"></div>
+
+        <form id="adminLoginForm">
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter admin username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login to Admin Portal
+            </button>
+
+        </form>
+
+        <div class="demo-login">
+            <strong>Demo Login</strong><br>
+            Username: <strong>admin</strong><br>
+            Password: <strong>admin123</strong>
+        </div>
+
+        <a href="../index.html" class="back-link">
+            ← Back to RIS Website
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+    const SESSION_KEY = "RIS_admin_session";
+
+    // If already logged in, go directly to dashboard
+    if (localStorage.getItem(SESSION_KEY)) {
+        window.location.href = "admin-dashboard.html";
+    }
+
+    document.getElementById("adminLoginForm").addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const message = document.getElementById("loginMessage");
+
+        // Prototype admin credentials
+        if (username === "admin" && password === "admin123") {
+
+            const session = {
+                username: username,
+                loginTime: new Date().toISOString()
+            };
+
+            localStorage.setItem(
+                SESSION_KEY,
+                JSON.stringify(session)
+            );
+
+            window.location.href = "admin-dashboard.html";
+
+        } else {
+
+            message.textContent = "Invalid username or password.";
+            message.className = "message error";
+
+        }
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Vouchers - RIS</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <style>
+
+        body {
+            background: #f1f5f9;
+            margin: 0;
+        }
+
+        .page-container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .page-header p {
+            margin: 6px 0 0;
+            color: #64748b;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #0f172a;
+            color: white;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .stat-card p {
+            margin: 0 0 7px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group small {
+            margin-top: 6px;
+            color: #64748b;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th,
+        td {
+            padding: 12px 9px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            color: #64748b;
+        }
+
+        .voucher-code {
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .unused {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .used {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .disabled {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 9px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 3px;
+            margin-bottom: 3px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .copy-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .use-btn {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .disable-btn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-row input,
+        .search-row select {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media (max-width: 800px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .page-container {
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<script src="../js/admin-auth.js"></script>
+<script src="../js/security.js"></script>
+
+<script>
+    secureAdminPage();
+    startSecurityMonitor("admin");
+    startActivityTracking("admin");
+</script>
+
+<script>
+    requireAdminLogin();
+</script>
+
+
+<div class="page-container">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Voucher Management</h1>
+
+            <p>
+                Generate and manage prepaid internet access vouchers.
+            </p>
+
+        </div>
+
+        <a
+            href="admin-dashboard.html"
+            class="back-btn"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <p>Total Vouchers</p>
+
+            <h2 id="totalVouchers">
+                0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>Unused</p>
+
+            <h2 id="unusedVouchers">
+                0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>Used</p>
+
+            <h2 id="usedVouchers">
+                0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>Expired</p>
+
+            <h2 id="expiredVouchers">
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- GENERATOR -->
+
+    <div class="panel">
+
+        <h2>Generate Vouchers</h2>
+
+
+        <form id="voucherForm">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Internet Package
+                    </label>
+
+                    <select
+                        id="packageId"
+                        required
+                    >
+
+                        <option value="">
+                            Select package
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Number of Vouchers
+                    </label>
+
+                    <select id="quantity">
+
+                        <option value="1">
+                            1
+                        </option>
+
+                        <option value="5">
+                            5
+                        </option>
+
+                        <option value="10">
+                            10
+                        </option>
+
+                        <option value="20">
+                            20
+                        </option>
+
+                        <option value="50">
+                            50
+                        </option>
+
+                        <option value="100">
+                            100
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Voucher Prefix
+                    </label>
+
+                    <input
+                        type="text"
+                        id="prefix"
+                        value="RIS"
+                        maxlength="8"
+                    >
+
+                    <small>
+                        Example: RIS
+                    </small>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Code Length
+                    </label>
+
+                    <select id="codeLength">
+
+                        <option value="6">
+                            6 characters
+                        </option>
+
+                        <option value="8" selected>
+                            8 characters
+                        </option>
+
+                        <option value="10">
+                            10 characters
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="packagePreview"
+                style="
+                    margin-top:20px;
+                    padding:15px;
+                    background:#f8fafc;
+                    border-radius:8px;
+                    color:#475569;
+                "
+            >
+                Select a package to view its price and validity.
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Generate Vouchers
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="deleteAllVouchers()"
+                >
+                    Delete All
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="panel">
+
+        <h2>Voucher List</h2>
+
+
+        <div class="search-row">
+
+            <input
+                type="text"
+                id="search"
+                placeholder="Search voucher code or package..."
+            >
+
+
+            <select id="statusFilter">
+
+                <option value="All">
+                    All Statuses
+                </option>
+
+                <option value="Unused">
+                    Unused
+                </option>
+
+                <option value="Used">
+                    Used
+                </option>
+
+                <option value="Expired">
+                    Expired
+                </option>
+
+                <option value="Disabled">
+                    Disabled
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Voucher Code</th>
+
+                        <th>Package</th>
+
+                        <th>Price</th>
+
+                        <th>Validity</th>
+
+                        <th>Created</th>
+
+                        <th>Expiry</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="voucherTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    const VOUCHER_KEY = "RIS_vouchers";
+    const PACKAGE_KEY = "RIS_packages";
+
+    function getVouchers() {
+        try {
+            const data = JSON.parse(localStorage.getItem(VOUCHER_KEY));
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveVouchers(vouchers) {
+        localStorage.setItem(VOUCHER_KEY, JSON.stringify(vouchers));
+    }
+
+    function getPackages() {
+        try {
+            const data = JSON.parse(localStorage.getItem(PACKAGE_KEY));
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function createId() {
+        return "VCH-" + Date.now().toString(36) + "-" +
+            Math.random().toString(36).substring(2, 9).toUpperCase();
+    }
+
+    function todayString() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`;
+    }
+
+    function addDaysToDate(dateString, days) {
+        const d = new Date(dateString + "T00:00:00");
+        d.setDate(d.getDate() + Number(days || 0));
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`;
+    }
+
+    function formatDate(date) {
+        if (!date) return "-";
+        const d = new Date(date);
+        if (Number.isNaN(d.getTime())) return "-";
+        return d.toLocaleDateString();
+    }
+
+    function showMessage(text, type) {
+        const message = document.getElementById("message");
+        message.textContent = text;
+        message.className = "message " + (type || "success");
+
+        clearTimeout(window.risMessageTimer);
+        window.risMessageTimer = setTimeout(() => {
+            message.className = "message";
+        }, 3500);
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    /*
+     * If the package page has not been opened yet, create default
+     * packages so the voucher generator can still work.
+     */
+    function ensurePackagesExist() {
+        let packages = getPackages();
+
+        if (packages.length === 0) {
+            packages = [
+                {
+                    id: "PKG-BASIC",
+                    name: "Basic",
+                    speed: 5,
+                    price: 30000,
+                    validity: 30,
+                    status: "Active"
+                },
+                {
+                    id: "PKG-STANDARD",
+                    name: "Standard",
+                    speed: 10,
+                    price: 50000,
+                    validity: 30,
+                    status: "Active"
+                },
+                {
+                    id: "PKG-PREMIUM",
+                    name: "Premium",
+                    speed: 20,
+                    price: 80000,
+                    validity: 30,
+                    status: "Active"
+                },
+                {
+                    id: "PKG-BUSINESS",
+                    name: "Business",
+                    speed: 50,
+                    price: 150000,
+                    validity: 30,
+                    status: "Active"
+                }
+            ];
+
+            localStorage.setItem(PACKAGE_KEY, JSON.stringify(packages));
+        }
+
+        return packages;
+    }
+
+    function loadPackages() {
+        const packages = ensurePackagesExist();
+        const select = document.getElementById("packageId");
+
+        select.innerHTML = '<option value="">Select package</option>';
+
+        const activePackages = packages.filter(p =>
+            String(p.status || "").toLowerCase() === "active"
+        );
+
+        activePackages.forEach(p => {
+            const option = document.createElement("option");
+            option.value = String(p.id);
+            option.textContent =
+                `${p.name} - UGX ${Number(p.price || 0).toLocaleString()}`;
+            select.appendChild(option);
+        });
+
+        if (activePackages.length === 0) {
+            select.innerHTML =
+                '<option value="">No active packages available</option>';
+
+            showMessage(
+                "No active packages found. Go to Packages and activate a package.",
+                "error"
+            );
+        }
+    }
+
+    function showPackagePreview() {
+        const packageId = document.getElementById("packageId").value;
+        const preview = document.getElementById("packagePreview");
+        const packages = ensurePackagesExist();
+
+        const packageItem = packages.find(
+            p => String(p.id) === String(packageId)
+        );
+
+        if (!packageItem) {
+            preview.innerHTML =
+                "Select a package to view its price and validity.";
+            return;
+        }
+
+        preview.innerHTML = `
+            <strong>${escapeHtml(packageItem.name)}</strong>
+            &nbsp; | &nbsp;
+            Speed: <strong>${escapeHtml(packageItem.speed)} Mbps</strong>
+            &nbsp; | &nbsp;
+            Price: <strong>UGX ${Number(packageItem.price || 0).toLocaleString()}</strong>
+            &nbsp; | &nbsp;
+            Validity: <strong>${escapeHtml(packageItem.validity)} Days</strong>
+        `;
+    }
+
+    function randomCode(length) {
+        const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let result = "";
+
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(
+                Math.floor(Math.random() * characters.length)
+            );
+        }
+
+        return result;
+    }
+
+    function generateUniqueCode(prefix, length, existingCodes) {
+        let code;
+        let attempts = 0;
+
+        do {
+            code = prefix + "-" + randomCode(length);
+            attempts++;
+
+            if (attempts > 1000) {
+                throw new Error("Could not create a unique voucher code.");
+            }
+        } while (existingCodes.has(code));
+
+        existingCodes.add(code);
+        return code;
+    }
+
+    /*
+     * MAIN GENERATOR
+     */
+    function generateVouchers() {
+        try {
+            const packageId =
+                document.getElementById("packageId").value;
+
+            const quantity =
+                Number(document.getElementById("quantity").value);
+
+            const prefixInput =
+                document.getElementById("prefix").value.trim();
+
+            const prefix =
+                prefixInput
+                    .toUpperCase()
+                    .replace(/[^A-Z0-9]/g, "")
+                    .substring(0, 8);
+
+            const codeLength =
+                Number(document.getElementById("codeLength").value);
+
+            if (!packageId) {
+                showMessage(
+                    "Please select an internet package.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!quantity || quantity < 1 || quantity > 100) {
+                showMessage(
+                    "Please choose between 1 and 100 vouchers.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!prefix) {
+                showMessage(
+                    "Please enter a voucher prefix.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!codeLength || codeLength < 4 || codeLength > 20) {
+                showMessage(
+                    "Invalid voucher code length.",
+                    "error"
+                );
+                return;
+            }
+
+            const packages = ensurePackagesExist();
+
+            const packageItem = packages.find(
+                p => String(p.id) === String(packageId)
+            );
+
+            if (!packageItem) {
+                showMessage(
+                    "The selected package no longer exists. Refresh the page.",
+                    "error"
+                );
+                loadPackages();
+                return;
+            }
+
+            const vouchers = getVouchers();
+
+            const existingCodes = new Set(
+                vouchers
+                    .map(v => String(v.code || "").toUpperCase())
+                    .filter(Boolean)
+            );
+
+            /*
+             * Use the selected start date if present.
+             * The original code used the current date automatically.
+             */
+            const startDate =
+                document.getElementById("voucherStartDate")?.value ||
+                todayString();
+
+            const newVouchers = [];
+
+            for (let i = 0; i < quantity; i++) {
+                const code = generateUniqueCode(
+                    prefix,
+                    codeLength,
+                    existingCodes
+                );
+
+                newVouchers.push({
+                    id: createId(),
+                    code: code,
+                    packageId: packageItem.id,
+                    packageName: packageItem.name,
+                    speed: Number(packageItem.speed || 0),
+                    price: Number(packageItem.price || 0),
+                    validity: Number(packageItem.validity || 30),
+                    createdAt: new Date().toISOString(),
+                    expiryDate: addDaysToDate(
+                        startDate,
+                        Number(packageItem.validity || 30)
+                    ),
+                    status: "Unused",
+                    usedAt: null
+                });
+            }
+
+            saveVouchers(vouchers.concat(newVouchers));
+
+            renderVouchers();
+            updateStats();
+
+            showMessage(
+                `${quantity} voucher${quantity === 1 ? "" : "s"} generated successfully.`,
+                "success"
+            );
+
+        } catch (error) {
+            console.error("RIS voucher generation error:", error);
+
+            showMessage(
+                "Voucher generation failed: " + error.message,
+                "error"
+            );
+        }
+    }
+
+    /*
+     * Form handler.
+     * This is deliberately attached after all functions are defined.
+     */
+    document.getElementById("voucherForm").addEventListener(
+        "submit",
+        function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            generateVouchers();
+        }
+    );
+
+    function updateExpiredVouchers() {
+        const vouchers = getVouchers();
+        const currentDate = new Date();
+        let changed = false;
+
+        vouchers.forEach(voucher => {
+            if (
+                voucher.status === "Unused" &&
+                voucher.expiryDate
+            ) {
+                const expiry = new Date(
+                    String(voucher.expiryDate).includes("T")
+                        ? voucher.expiryDate
+                        : voucher.expiryDate + "T23:59:59"
+                );
+
+                if (expiry < currentDate) {
+                    voucher.status = "Expired";
+                    changed = true;
+                }
+            }
+        });
+
+        if (changed) {
+            saveVouchers(vouchers);
+        }
+    }
+
+    function updateStats() {
+        const vouchers = getVouchers();
+
+        document.getElementById("totalVouchers").textContent =
+            vouchers.length;
+
+        document.getElementById("unusedVouchers").textContent =
+            vouchers.filter(v => v.status === "Unused").length;
+
+        document.getElementById("usedVouchers").textContent =
+            vouchers.filter(v => v.status === "Used").length;
+
+        document.getElementById("expiredVouchers").textContent =
+            vouchers.filter(v => v.status === "Expired").length;
+    }
+
+    function renderVouchers() {
+        updateExpiredVouchers();
+
+        const vouchers = getVouchers();
+
+        const search =
+            document.getElementById("search").value
+                .trim()
+                .toLowerCase();
+
+        const statusFilter =
+            document.getElementById("statusFilter").value;
+
+        const filtered = vouchers.filter(voucher => {
+            const code =
+                String(voucher.code || "").toLowerCase();
+
+            const packageName =
+                String(voucher.packageName || "").toLowerCase();
+
+            const matchesSearch =
+                !search ||
+                code.includes(search) ||
+                packageName.includes(search);
+
+            const matchesStatus =
+                statusFilter === "All" ||
+                voucher.status === statusFilter;
+
+            return matchesSearch && matchesStatus;
+        });
+
+        const table =
+            document.getElementById("voucherTable");
+
+        if (filtered.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="8" class="empty">
+                        No vouchers found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        table.innerHTML = filtered
+            .slice()
+            .reverse()
+            .map(voucher => {
+                let badgeClass = "disabled";
+
+                if (voucher.status === "Unused")
+                    badgeClass = "unused";
+
+                if (voucher.status === "Used")
+                    badgeClass = "used";
+
+                if (voucher.status === "Expired")
+                    badgeClass = "expired";
+
+                return `
+                    <tr>
+                        <td>
+                            <span class="voucher-code">
+                                ${escapeHtml(voucher.code)}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(voucher.packageName || "-")}
+                        </td>
+
+                        <td>
+                            UGX ${Number(voucher.price || 0).toLocaleString()}
+                        </td>
+
+                        <td>
+                            ${Number(voucher.validity || 0)} Days
+                        </td>
+
+                        <td>
+                            ${formatDate(voucher.createdAt)}
+                        </td>
+
+                        <td>
+                            ${formatDate(voucher.expiryDate)}
+                        </td>
+
+                        <td>
+                            <span class="badge ${badgeClass}">
+                                ${escapeHtml(voucher.status || "Unused")}
+                            </span>
+                        </td>
+
+                        <td>
+                            <button
+                                class="action-btn copy-btn"
+                                onclick="copyVoucher('${escapeHtml(voucher.id)}')"
+                            >
+                                Copy
+                            </button>
+
+                            ${
+                                voucher.status === "Unused"
+                                    ? `
+                                        <button
+                                            class="action-btn use-btn"
+                                            onclick="markUsed('${escapeHtml(voucher.id)}')"
+                                        >
+                                            Mark Used
+                                        </button>
+                                    `
+                                    : ""
+                            }
+
+                            ${
+                                voucher.status !== "Used" &&
+                                voucher.status !== "Expired"
+                                    ? `
+                                        <button
+                                            class="action-btn disable-btn"
+                                            onclick="disableVoucher('${escapeHtml(voucher.id)}')"
+                                        >
+                                            ${
+                                                voucher.status === "Disabled"
+                                                    ? "Enable"
+                                                    : "Disable"
+                                            }
+                                        </button>
+                                    `
+                                    : ""
+                            }
+
+                            <button
+                                class="action-btn delete-btn"
+                                onclick="deleteVoucher('${escapeHtml(voucher.id)}')"
+                            >
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            })
+            .join("");
+    }
+
+    async function copyVoucher(id) {
+        const vouchers = getVouchers();
+
+        const voucher = vouchers.find(
+            v => String(v.id) === String(id)
+        );
+
+        if (!voucher) return;
+
+        try {
+            await navigator.clipboard.writeText(voucher.code);
+
+            showMessage(
+                "Voucher code copied.",
+                "success"
+            );
+
+        } catch (error) {
+            prompt("Copy this voucher code:", voucher.code);
+        }
+    }
+
+    function markUsed(id) {
+        const vouchers = getVouchers();
+
+        const voucher = vouchers.find(
+            v => String(v.id) === String(id)
+        );
+
+        if (!voucher || voucher.status !== "Unused") return;
+
+        if (!confirm(`Mark voucher ${voucher.code} as used?`)) {
+            return;
+        }
+
+        voucher.status = "Used";
+        voucher.usedAt = new Date().toISOString();
+
+        saveVouchers(vouchers);
+
+        renderVouchers();
+        updateStats();
+
+        showMessage(
+            "Voucher marked as used.",
+            "success"
+        );
+    }
+
+    function disableVoucher(id) {
+        const vouchers = getVouchers();
+
+        const voucher = vouchers.find(
+            v => String(v.id) === String(id)
+        );
+
+        if (!voucher) return;
+
+        if (!confirm(
+            `${voucher.status === "Disabled" ? "Enable" : "Disable"} voucher ${voucher.code}?`
+        )) {
+            return;
+        }
+
+        voucher.status =
+            voucher.status === "Disabled"
+                ? "Unused"
+                : "Disabled";
+
+        saveVouchers(vouchers);
+
+        renderVouchers();
+        updateStats();
+
+        showMessage(
+            voucher.status === "Disabled"
+                ? "Voucher disabled."
+                : "Voucher enabled.",
+            "success"
+        );
+    }
+
+    function deleteVoucher(id) {
+        const vouchers = getVouchers();
+
+        const voucher = vouchers.find(
+            v => String(v.id) === String(id)
+        );
+
+        if (!voucher) return;
+
+        if (!confirm(
+            `Delete voucher ${voucher.code}?`
+        )) {
+            return;
+        }
+
+        saveVouchers(
+            vouchers.filter(
+                v => String(v.id) !== String(id)
+            )
+        );
+
+        renderVouchers();
+        updateStats();
+
+        showMessage(
+            "Voucher deleted.",
+            "success"
+        );
+    }
+
+    function deleteAllVouchers() {
+        const vouchers = getVouchers();
+
+        if (vouchers.length === 0) {
+            showMessage(
+                "There are no vouchers to delete.",
+                "error"
+            );
+            return;
+        }
+
+        if (!confirm(
+            "WARNING: This will delete ALL vouchers. Continue?"
+        )) {
+            return;
+        }
+
+        localStorage.removeItem(VOUCHER_KEY);
+
+        renderVouchers();
+        updateStats();
+
+        showMessage(
+            "All vouchers deleted.",
+            "success"
+        );
+    }
+
+    document.getElementById("search").addEventListener(
+        "input",
+        renderVouchers
+    );
+
+    document.getElementById("statusFilter").addEventListener(
+        "change",
+        renderVouchers
+    );
+
+    /*
+     * Start the page.
+     */
+    loadPackages();
+    updateExpiredVouchers();
+    renderVouchers();
+    updateStats();
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>RIS - Reliable Internet Services</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            color: #0f172a;
+            background: #ffffff;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .public-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,.96);
+            border-bottom: 1px solid #e5e7eb;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1180px;
+            margin: auto;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .public-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #0f172a;
+        }
+
+        .logo-box {
+            width: 43px;
+            height: 43px;
+            background: #2563eb;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .logo-text strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .logo-text small {
+            color: #64748b;
+            font-size: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 9px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-outline {
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            background: white;
+        }
+
+        .btn-outline:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    #eff6ff 0%,
+                    #ffffff 55%,
+                    #f8fafc 100%
+                );
+            padding: 90px 20px 80px;
+        }
+
+        .hero-container {
+            max-width: 1180px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 8px 13px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 6vw, 68px);
+            line-height: 1.04;
+            margin: 0 0 22px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            color: #2563eb;
+        }
+
+        .hero p {
+            max-width: 620px;
+            color: #64748b;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-note {
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .hero-visual {
+            background: white;
+            border: 1px solid #dbeafe;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow:
+                0 25px 60px rgba(15,23,42,.10);
+        }
+
+        .network-window {
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            overflow: hidden;
+        }
+
+        .window-top {
+            background: #f8fafc;
+            padding: 13px 15px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .window-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #cbd5e1;
+        }
+
+        .network-content {
+            padding: 20px;
+        }
+
+        .network-title {
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .network-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .network-stat {
+            padding: 17px;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .network-stat strong {
+            display: block;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .network-stat span {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* =========================
+           GENERAL
+        ========================= */
+
+        .section {
+            padding: 80px 20px;
+        }
+
+        .section-light {
+            background: #f8fafc;
+        }
+
+        .section-container {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 45px;
+        }
+
+        .section-heading span {
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-heading h2 {
+            font-size: 36px;
+            margin: 10px 0 13px;
+        }
+
+        .section-heading p {
+            color: #64748b;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* =========================
+           FEATURES
+        ========================= */
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 25px;
+            transition: .2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 15px 35px rgba(15,23,42,.08);
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: #dbeafe;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 9px;
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* =========================
+           PACKAGES
+        ========================= */
+
+        .package-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .package-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .package-card.popular {
+            border: 2px solid #2563eb;
+        }
+
+        .popular-label {
+            position: absolute;
+            top: -12px;
+            right: 18px;
+            background: #2563eb;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .package-card h3 {
+            margin: 0 0 10px;
+        }
+
+        .package-speed {
+            color: #2563eb;
+            font-weight: 800;
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .package-price {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .package-validity {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .package-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* =========================
+           HOW IT WORKS
+        ========================= */
+
+        .steps {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 17px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .step h3 {
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* =========================
+           CTA
+        ========================= */
+
+        .cta {
+            margin: 0 20px;
+            border-radius: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 60px 25px;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 750px;
+            margin: auto;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            margin: 0 0 15px;
+        }
+
+        .cta p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            margin-top: 80px;
+            background: #020617;
+            color: white;
+            padding: 55px 20px 25px;
+        }
+
+        .footer-grid {
+            max-width: 1180px;
+            margin: auto;
+            display: grid;
+            grid-template-columns:
+                1.5fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        footer h3,
+        footer h4 {
+            margin-top: 0;
+        }
+
+        footer p,
+        footer a {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        footer a {
+            display: block;
+            text-decoration: none;
+            margin-bottom: 7px;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1180px;
+            margin: 35px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #1e293b;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .package-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .nav-actions .btn-outline {
+                display: none;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .feature-grid,
+            .package-grid,
+            .steps,
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .section-heading h2,
+            .cta h2 {
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="public-nav">
+
+    <div class="nav-container">
+
+        <a
+            href="index.html"
+            class="public-logo"
+        >
+
+            <div class="logo-box">
+                RIS
+            </div>
+
+            <div class="logo-text">
+
+                <strong>
+                    Reliable Internet Services
+                </strong>
+
+                <small>
+                    Fast. Reliable. Connected.
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="#features">
+                Features
+            </a>
+
+            <a href="#packages">
+                Packages
+            </a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
+
+        </div>
+
+
+        <div class="nav-actions">
+
+            <a
+                href="pages/customer-login.html"
+                class="btn btn-outline"
+            >
+                Customer Login
+            </a>
+
+            <a
+                href="pages/customers.html"
+                class="btn btn-primary"
+            >
+                Admin Portal
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-container">
+
+
+        <div>
+
+            <div class="hero-badge">
+                RELIABLE INTERNET SERVICES
+            </div>
+
+
+            <h1>
+                Internet that
+                <span>keeps you connected.</span>
+            </h1>
+
+
+            <p>
+                RIS helps internet service providers manage
+                customers, packages, vouchers, payments,
+                routers and data usage from one simple system.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#packages"
+                    class="btn btn-primary"
+                >
+                    View Internet Packages
+                </a>
+
+
+                <a
+                    href="pages/customer-login.html"
+                    class="btn btn-outline"
+                >
+                    Customer Login
+                </a>
+
+            </div>
+
+
+            <div class="hero-note">
+                Simple management • Flexible packages •
+                Customer self-service
+            </div>
+
+        </div>
+
+
+
+        <div class="hero-visual">
+
+            <div class="network-window">
+
+                <div class="window-top">
+
+                    <span class="window-dot"></span>
+                    <span class="window-dot"></span>
+                    <span class="window-dot"></span>
+
+                </div>
+
+
+                <div class="network-content">
+
+                    <div class="network-title">
+                        RIS Network Overview
+                    </div>
+
+
+                    <div class="network-stats">
+
+                        <div class="network-stat">
+
+                            <strong id="heroCustomers">
+                                0
+                            </strong>
+
+                            <span>
+                                Customers
+                            </span>
+
+                        </div>
+
+
+                        <div class="network-stat">
+
+                            <strong id="heroPackages">
+                                0
+                            </strong>
+
+                            <span>
+                                Packages
+                            </span>
+
+                        </div>
+
+
+                        <div class="network-stat">
+
+                            <strong id="heroRouters">
+                                0
+                            </strong>
+
+                            <span>
+                                Routers
+                            </span>
+
+                        </div>
+
+
+                        <div class="network-stat">
+
+                            <strong>
+                                24/7
+                            </strong>
+
+                            <span>
+                                Service Management
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section
+    class="section section-light"
+    id="features"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>
+                Powerful Management
+            </span>
+
+            <h2>
+                Everything your internet business needs
+            </h2>
+
+            <p>
+                RIS brings the important parts of internet
+                service management together in one platform.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    01
+                </div>
+
+                <h3>
+                    Customer Management
+                </h3>
+
+                <p>
+                    Register customers, manage their accounts,
+                    assign packages and track service status.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    02
+                </div>
+
+                <h3>
+                    Internet Packages
+                </h3>
+
+                <p>
+                    Create flexible internet packages with
+                    different speeds, prices and validity periods.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    03
+                </div>
+
+                <h3>
+                    Voucher Management
+                </h3>
+
+                <p>
+                    Generate unique access vouchers and keep
+                    track of unused, used and expired vouchers.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    04
+                </div>
+
+                <h3>
+                    Payment Tracking
+                </h3>
+
+                <p>
+                    Record payments through mobile money,
+                    cash, bank, card and other methods.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    05
+                </div>
+
+                <h3>
+                    Usage Monitoring
+                </h3>
+
+                <p>
+                    Track customer sessions, download,
+                    upload and total data consumption.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    06
+                </div>
+
+                <h3>
+                    Reports
+                </h3>
+
+                <p>
+                    View revenue, customer, voucher, router
+                    and usage information through useful reports.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     PACKAGES
+========================= -->
+
+<section
+    class="section"
+    id="packages"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>
+                Internet Packages
+            </span>
+
+            <h2>
+                Choose a package that fits you
+            </h2>
+
+            <p>
+                Our available packages are managed directly
+                through the RIS system.
+            </p>
+
+        </div>
+
+
+        <div
+            class="package-grid"
+            id="packageGrid"
+        >
+
+            <!-- JavaScript loads packages here -->
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section
+    class="section section-light"
+    id="how-it-works"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>
+                Simple Process
+            </span>
+
+            <h2>
+                Getting connected is simple
+            </h2>
+
+            <p>
+                RIS makes it easier for customers and
+                administrators to manage internet services.
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <h3>
+                    Choose a Package
+                </h3>
+
+                <p>
+                    Select an internet package based on
+                    your preferred speed and validity.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <h3>
+                    Make Payment
+                </h3>
+
+                <p>
+                    Pay for your internet service using
+                    an available payment method.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <h3>
+                    Get Connected
+                </h3>
+
+                <p>
+                    Your account can then be activated
+                    and your internet service managed.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     CTA
+========================= -->
+
+<section class="section">
+
+    <div class="cta">
+
+        <div class="cta-container">
+
+            <h2>
+                Ready to manage your internet service?
+            </h2>
+
+            <p>
+                Customers can access their accounts while
+                administrators manage the entire internet
+                service operation from RIS.
+            </p>
+
+
+            <div class="hero-buttons"
+                 style="justify-content:center;">
+
+                <a
+                    href="pages/customer-login.html"
+                    class="btn btn-primary"
+                >
+                    Customer Login
+                </a>
+
+
+                <a
+                    href="pages/customers.html"
+                    class="btn btn-outline"
+                    style="background:white;"
+                >
+                    Open Admin Portal
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section
+    class="section section-light"
+    id="contact"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>
+                Contact
+            </span>
+
+            <h2>
+                Need help?
+            </h2>
+
+            <p>
+                Contact your RIS administrator or internet
+                service provider for account and connection
+                assistance.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-grid">
+
+
+        <div>
+
+            <h3>
+                RIS
+            </h3>
+
+            <p>
+                Reliable Internet Services is a platform
+                for managing customers, internet packages,
+                payments, vouchers, routers and usage.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h4>
+                Platform
+            </h4>
+
+            <a href="#features">
+                Features
+            </a>
+
+            <a href="#packages">
+                Packages
+            </a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h4>
+                Account
+            </h4>
+
+            <a href="pages/customer-login.html">
+                Customer Login
+            </a>
+
+            <a href="pages/admin-login.html">
+                Admin Portal
+            </a>
+
+            <a href="pages/reports.html">
+                Reports
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h4>
+                Management
+            </h4>
+
+            <a href="pages/packages.html">
+                Packages
+            </a>
+
+            <a href="pages/vouchers.html">
+                Vouchers
+            </a>
+
+            <a href="pages/payments.html">
+                Payments
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © <span id="currentYear"></span>
+        Reliable Internet Services (RIS).
+        All rights reserved.
+
+    </div>
+
+</footer>
+
+
+
+<script>
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
+function getData(key) {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(key)
+        ) || [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================
+   CURRENCY
+========================= */
+
+function formatCurrency(amount) {
+
+    return "UGX " +
+        Number(amount || 0)
+        .toLocaleString("en-US", {
+            maximumFractionDigits: 0
+        });
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================
+   LOAD PACKAGES
+========================= */
+
+function loadPackages() {
+
+    const packages =
+        getData("RIS_packages")
+        .filter(
+            pkg =>
+                pkg.status === "Active"
+        );
+
+
+    const container =
+        document.getElementById(
+            "packageGrid"
+        );
+
+
+    if (packages.length === 0) {
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    grid-column:1/-1;
+                    text-align:center;
+                    padding:40px;
+                    color:#64748b;
+                "
+            >
+
+                No active internet packages
+                are currently available.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        packages.map((pkg, index) => {
+
+            return `
+
+                <div class="package-card
+                    ${index === 1
+                        ? "popular"
+                        : ""}">
+
+                    ${
+                        index === 1
+                        ?
+                        `<div class="popular-label">
+                            POPULAR
+                        </div>`
+                        :
+                        ""
+                    }
+
+
+                    <h3>
+                        ${escapeHtml(pkg.name)}
+                    </h3>
+
+
+                    <div class="package-speed">
+                        ${escapeHtml(pkg.speed)}
+                    </div>
+
+
+                    <div class="package-price">
+                        ${formatCurrency(pkg.price)}
+                    </div>
+
+
+                    <div class="package-validity">
+
+                        Valid for
+                        ${escapeHtml(
+                            String(pkg.validity)
+                        )}
+                        days
+
+                    </div>
+
+
+                    <a
+                        href="pages/customer-login.html"
+                        class="btn btn-primary"
+                    >
+                        Get Started
+                    </a>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   LOAD STATISTICS
+========================= */
+
+function loadStatistics() {
+
+    const customers =
+        getData("RIS_customers");
+
+    const packages =
+        getData("RIS_packages");
+
+    const routers =
+        getData("RIS_routers");
+
+
+    document.getElementById(
+        "heroCustomers"
+    ).textContent =
+        customers.length;
+
+
+    document.getElementById(
+        "heroPackages"
+    ).textContent =
+        packages.filter(
+            p => p.status === "Active"
+        ).length;
+
+
+    document.getElementById(
+        "heroRouters"
+    ).textContent =
+        routers.filter(
+            r =>
+                r.status !== "Disabled"
+        ).length;
+
+}
+
+
+/* =========================
+   YEAR
+========================= */
+
+document.getElementById(
+    "currentYear"
+).textContent =
+    new Date().getFullYear();
+
+
+/* =========================
+   START
+========================= */
+
+loadPackages();
+
+loadStatistics();
+
+</script>
+
+
+</body>
+</html>

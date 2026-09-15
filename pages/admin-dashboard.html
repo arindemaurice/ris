@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - RIS</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f1f5f9;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #0f172a;
+            color: white;
+            padding: 25px 15px;
+            box-sizing: border-box;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            padding: 0 15px 30px;
+        }
+
+        .brand span {
+            color: #60a5fa;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            padding: 15px;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #1e40af;
+            color: white;
+        }
+
+        .logout-btn {
+            width: 100%;
+            border: none;
+            background: #7f1d1d;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #991b1b;
+        }
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .admin-user {
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.05);
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.05);
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .quick-actions {
+            display: grid;
+            gap: 10px;
+        }
+
+        .action {
+            display: block;
+            padding: 13px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .action:hover {
+            background: #dbeafe;
+        }
+
+        .empty {
+            color: #64748b;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .admin-layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<script src="../js/admin-auth.js"></script>
+<script src="../js/security.js"></script>
+
+<script>
+    secureAdminPage();
+    startSecurityMonitor("admin");
+    startActivityTracking("admin");
+</script>
+
+<script>
+    requireAdminLogin();
+</script>
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <span>RIS</span> Admin
+        </div>
+
+        <div class="nav-title">Main</div>
+
+        <a href="admin-dashboard.html" class="nav-link active">
+            Dashboard
+        </a>
+
+        <a href="customers.html" class="nav-link">
+            Customers
+        </a>
+
+        <a href="packages.html" class="nav-link">
+            Packages
+        </a>
+
+        <a href="vouchers.html" class="nav-link">
+            Vouchers
+        </a>
+
+        <a href="payments.html" class="nav-link">
+            Payments
+        </a>
+
+        <div class="nav-title">Network</div>
+
+        <a href="routers.html" class="nav-link">
+            Routers
+        </a>
+
+        <a href="usage.html" class="nav-link">
+            Usage
+        </a>
+
+        <div class="nav-title">Management</div>
+
+        <a href="reports.html" class="nav-link">
+            Reports
+        </a>
+
+        <a href="../index.html" class="nav-link">
+            Public Website
+        </a>
+        <a href="settings.html">⚙️ Settings</a>
+
+        <button class="logout-btn" onclick="adminLogout()">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="topbar">
+
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p style="margin:5px 0 0;color:#64748b;">
+                    RIS management overview
+                </p>
+            </div>
+
+            <div class="admin-user">
+                Logged in as:
+                <strong id="adminUsername">Admin</strong>
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-label">Total Customers</div>
+                <div class="stat-value" id="totalCustomers">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Active Customers</div>
+                <div class="stat-value" id="activeCustomers">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-value" id="totalRevenue">UGX 0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Online Routers</div>
+                <div class="stat-value" id="onlineRouters">0</div>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+            <!-- RECENT PAYMENTS -->
+
+            <div>
+
+                <div class="panel">
+
+                    <h2>Recent Payments</h2>
+
+                    <div id="recentPayments"></div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <h2>System Overview</h2>
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Records</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Customers</td>
+                                <td id="customerCount">0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Internet Packages</td>
+                                <td id="packageCount">0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Vouchers</td>
+                                <td id="voucherCount">0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Payments</td>
+                                <td id="paymentCount">0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Routers</td>
+                                <td id="routerCount">0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Usage Sessions</td>
+                                <td id="usageCount">0</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div>
+
+                <div class="panel">
+
+                    <h2>Quick Actions</h2>
+
+                    <div class="quick-actions">
+
+                        <a href="add-customer.html" class="action">
+                            + Add Customer
+                        </a>
+
+                        <a href="packages.html" class="action">
+                            Manage Packages
+                        </a>
+
+                        <a href="vouchers.html" class="action">
+                            Generate Vouchers
+                        </a>
+
+                        <a href="payments.html" class="action">
+                            Record Payment
+                        </a>
+
+                        <a href="routers.html" class="action">
+                            Manage Routers
+                        </a>
+
+                        <a href="reports.html" class="action">
+                            View Reports
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <h2>RIS Status</h2>
+
+                    <p>
+                        <strong>Customer System:</strong>
+                        <span style="color:#16a34a;">● Active</span>
+                    </p>
+
+                    <p>
+                        <strong>Package System:</strong>
+                        <span style="color:#16a34a;">● Active</span>
+                    </p>
+
+                    <p>
+                        <strong>Payment System:</strong>
+                        <span style="color:#16a34a;">● Active</span>
+                    </p>
+
+                    <p>
+                        <strong>Voucher System:</strong>
+                        <span style="color:#16a34a;">● Active</span>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    function loadDashboard() {
+
+        const customers =
+            JSON.parse(localStorage.getItem("RIS_customers")) || [];
+
+        const packages =
+            JSON.parse(localStorage.getItem("RIS_packages")) || [];
+
+        const vouchers =
+            JSON.parse(localStorage.getItem("RIS_vouchers")) || [];
+
+        const payments =
+            JSON.parse(localStorage.getItem("RIS_payments")) || [];
+
+        const routers =
+            JSON.parse(localStorage.getItem("RIS_routers")) || [];
+
+        const usage =
+            JSON.parse(localStorage.getItem("RIS_usage")) || [];
+
+
+        // SESSION
+
+        const session = getAdminSession();
+
+        if (session) {
+            document.getElementById("adminUsername").textContent =
+                session.username;
+        }
+
+
+        // CUSTOMER STATS
+
+        const activeCustomers =
+            customers.filter(c => c.status === "Active").length;
+
+        document.getElementById("totalCustomers").textContent =
+            customers.length;
+
+        document.getElementById("activeCustomers").textContent =
+            activeCustomers;
+
+
+        // REVENUE
+
+        const totalRevenue =
+            payments
+                .filter(p => p.status === "Paid")
+                .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+        document.getElementById("totalRevenue").textContent =
+            "UGX " + totalRevenue.toLocaleString();
+
+
+        // ROUTERS
+
+        const onlineRouters =
+            routers.filter(r => r.status === "Online").length;
+
+        document.getElementById("onlineRouters").textContent =
+            onlineRouters;
+
+
+        // COUNTS
+
+        document.getElementById("customerCount").textContent =
+            customers.length;
+
+        document.getElementById("packageCount").textContent =
+            packages.length;
+
+        document.getElementById("voucherCount").textContent =
+            vouchers.length;
+
+        document.getElementById("paymentCount").textContent =
+            payments.length;
+
+        document.getElementById("routerCount").textContent =
+            routers.length;
+
+        document.getElementById("usageCount").textContent =
+            usage.length;
+
+
+        // RECENT PAYMENTS
+
+        const recentContainer =
+            document.getElementById("recentPayments");
+
+        const recentPayments =
+            [...payments]
+                .sort((a, b) =>
+                    new Date(b.paymentDate || 0) -
+                    new Date(a.paymentDate || 0)
+                )
+                .slice(0, 5);
+
+
+        if (recentPayments.length === 0) {
+
+            recentContainer.innerHTML =
+                `<div class="empty">No payments recorded yet.</div>`;
+
+        } else {
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Receipt</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            recentPayments.forEach(payment => {
+
+                const customer =
+                    customers.find(c => c.id === payment.customerId);
+
+                const customerName =
+                    customer ? customer.fullName : "Unknown";
+
+                html += `
+                    <tr>
+                        <td>${payment.receiptNumber || "-"}</td>
+                        <td>${customerName}</td>
+                        <td>UGX ${Number(payment.amount || 0).toLocaleString()}</td>
+                        <td>${payment.status || "-"}</td>
+                    </tr>
+                `;
+
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            recentContainer.innerHTML = html;
+
+        }
+
+    }
+
+
+    loadDashboard();
+
+</script>
+
+</body>
+</html>

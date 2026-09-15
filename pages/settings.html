@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | RIS</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f1f5f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .settings-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #0f172a;
+            color: white;
+            padding: 25px 15px;
+            box-sizing: border-box;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand span {
+            color: #38bdf8;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #1e293b;
+            color: white;
+        }
+
+        .sidebar .logout {
+            color: #fca5a5;
+            margin-top: 20px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h1 {
+            margin: 0 0 6px;
+            font-size: 28px;
+            color: #0f172a;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        .back-btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* MESSAGE */
+
+        #message {
+            display: none;
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        #message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* CARDS */
+
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 22px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+        }
+
+        .settings-card-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .settings-card-header h2 {
+            margin: 0 0 5px;
+            font-size: 19px;
+            color: #0f172a;
+        }
+
+        .settings-card-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            color: #0f172a;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .save-btn {
+            background: #2563eb;
+            border: none;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* SECURITY */
+
+        .security-note {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .danger-zone {
+            border: 1px solid #fecaca;
+        }
+
+        .danger-zone .settings-card-header h2 {
+            color: #b91c1c;
+        }
+
+        .warning {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .danger-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .danger-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .danger-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .settings-layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="settings-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            RIS<span>.</span>
+        </div>
+
+        <a href="admin-dashboard.html">
+            🏠 Dashboard
+        </a>
+
+        <a href="customers.html">
+            👥 Customers
+        </a>
+
+        <a href="packages.html">
+            📦 Packages
+        </a>
+
+        <a href="vouchers.html">
+            🎟️ Vouchers
+        </a>
+
+        <a href="payments.html">
+            💳 Payments
+        </a>
+
+        <a href="routers.html">
+            📡 Routers
+        </a>
+
+        <a href="usage.html">
+            📊 Usage
+        </a>
+
+        <a href="reports.html">
+            📈 Reports
+        </a>
+
+        <a href="settings.html" class="active">
+            ⚙️ Settings
+        </a>
+
+        <a href="../index.html">
+            🌐 Public Website
+        </a>
+
+        <a href="#" class="logout" onclick="logoutAdmin(); return false;">
+            🚪 Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Settings</h1>
+                <p>Manage your RIS system and business preferences.</p>
+            </div>
+
+            <a href="admin-dashboard.html" class="back-btn">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        <div id="message"></div>
+
+
+        <!-- BUSINESS -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <h2>🏢 Business Information</h2>
+
+                <p>
+                    Information used by your RIS system.
+                </p>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Business Name</label>
+
+                    <input
+                        type="text"
+                        id="businessName"
+                        placeholder="Reliable Internet Services">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        type="text"
+                        id="businessPhone"
+                        placeholder="+256 700 000000">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        id="businessEmail"
+                        placeholder="info@example.com">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Currency</label>
+
+                    <select id="currency">
+
+                        <option value="UGX">
+                            UGX - Ugandan Shilling
+                        </option>
+
+                        <option value="USD">
+                            USD - US Dollar
+                        </option>
+
+                        <option value="KES">
+                            KES - Kenyan Shilling
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>Business Address</label>
+
+                    <input
+                        type="text"
+                        id="businessAddress"
+                        placeholder="Kampala, Uganda">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREFERENCES -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <h2>⚙️ System Preferences</h2>
+
+                <p>
+                    Configure how RIS behaves.
+                </p>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Default Customer Status</label>
+
+                    <select id="defaultCustomerStatus">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Default Payment Status</label>
+
+                    <select id="defaultPaymentStatus">
+
+                        <option value="Unpaid">
+                            Unpaid
+                        </option>
+
+                        <option value="Paid">
+                            Paid
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Session Timeout</label>
+
+                    <select id="sessionTimeout">
+
+                        <option value="15">
+                            15 Minutes
+                        </option>
+
+                        <option value="30">
+                            30 Minutes
+                        </option>
+
+                        <option value="60">
+                            1 Hour
+                        </option>
+
+                        <option value="120">
+                            2 Hours
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Time Zone</label>
+
+                    <select id="timezone">
+
+                        <option value="Africa/Kampala">
+                            Africa/Kampala
+                        </option>
+
+                        <option value="Africa/Nairobi">
+                            Africa/Nairobi
+                        </option>
+
+                        <option value="UTC">
+                            UTC
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="save-btn" onclick="saveSettings()">
+                Save Settings
+            </button>
+
+        </div>
+
+
+        <!-- ADMIN ACCOUNT -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <h2>🔐 Admin Account</h2>
+
+                <p>
+                    Update the administrator account.
+                </p>
+
+            </div>
+
+
+            <div class="security-note">
+
+                🔒 Your current prototype uses browser storage.
+                For production, authentication will be moved to the secure backend.
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Admin Username</label>
+
+                    <input
+                        type="text"
+                        id="adminUsername"
+                        placeholder="admin">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Current Password</label>
+
+                    <input
+                        type="password"
+                        id="currentPassword"
+                        placeholder="Current password">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>New Password</label>
+
+                    <input
+                        type="password"
+                        id="newPassword"
+                        placeholder="Minimum 6 characters">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Confirm New Password</label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm password">
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="save-btn" onclick="changeAdminAccount()">
+                Update Admin Account
+            </button>
+
+        </div>
+
+
+        <!-- DATA -->
+
+        <div class="settings-card danger-zone">
+
+            <div class="settings-card-header">
+
+                <h2>⚠️ Data Management</h2>
+
+                <p>
+                    Manage demo data stored in this browser.
+                </p>
+
+            </div>
+
+
+            <div class="warning">
+
+                ⚠️ <strong>Important:</strong>
+                These actions permanently remove browser-stored RIS data.
+                Do not use them unless you are sure.
+
+            </div>
+
+
+            <div class="danger-buttons">
+
+                <button class="danger-btn" onclick="resetPackages()">
+                    Reset Packages
+                </button>
+
+                <button class="danger-btn" onclick="clearVouchers()">
+                    Clear Vouchers
+                </button>
+
+                <button class="danger-btn" onclick="clearPayments()">
+                    Clear Payments
+                </button>
+
+                <button class="danger-btn" onclick="clearUsage()">
+                    Clear Usage
+                </button>
+
+                <button class="danger-btn" onclick="clearCustomers()">
+                    Clear Customers
+                </button>
+
+                <button class="danger-btn" onclick="resetEverything()">
+                    Reset Entire RIS
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- AUTH -->
+
+<script src="../js/admin-auth.js"></script>
+<script src="../js/security.js"></script>
+
+<script>
+
+requireAdminLogin();
+
+secureAdminPage();
+
+startSecurityMonitor("admin");
+
+startActivityTracking("admin");
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+const DEFAULT_SETTINGS = {
+
+    businessName: "Reliable Internet Services",
+
+    businessPhone: "",
+
+    businessEmail: "",
+
+    businessAddress: "Kampala, Uganda",
+
+    currency: "UGX",
+
+    defaultCustomerStatus: "Active",
+
+    defaultPaymentStatus: "Unpaid",
+
+    sessionTimeout: "30",
+
+    timezone: "Africa/Kampala"
+
+};
+
+
+function getSettings() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("RIS_settings")
+        ) || DEFAULT_SETTINGS;
+
+    } catch (error) {
+
+        return DEFAULT_SETTINGS;
+
+    }
+
+}
+
+
+function loadSettings() {
+
+    const settings = getSettings();
+
+
+    document.getElementById("businessName").value =
+        settings.businessName || "";
+
+
+    document.getElementById("businessPhone").value =
+        settings.businessPhone || "";
+
+
+    document.getElementById("businessEmail").value =
+        settings.businessEmail || "";
+
+
+    document.getElementById("businessAddress").value =
+        settings.businessAddress || "";
+
+
+    document.getElementById("currency").value =
+        settings.currency || "UGX";
+
+
+    document.getElementById("defaultCustomerStatus").value =
+        settings.defaultCustomerStatus || "Active";
+
+
+    document.getElementById("defaultPaymentStatus").value =
+        settings.defaultPaymentStatus || "Unpaid";
+
+
+    document.getElementById("sessionTimeout").value =
+        settings.sessionTimeout || "30";
+
+
+    document.getElementById("timezone").value =
+        settings.timezone || "Africa/Kampala";
+
+
+    document.getElementById("adminUsername").value =
+        localStorage.getItem("RIS_admin_username") || "admin";
+
+}
+
+
+function saveSettings() {
+
+    const settings = {
+
+        businessName:
+            document.getElementById("businessName").value.trim(),
+
+        businessPhone:
+            document.getElementById("businessPhone").value.trim(),
+
+        businessEmail:
+            document.getElementById("businessEmail").value.trim(),
+
+        businessAddress:
+            document.getElementById("businessAddress").value.trim(),
+
+        currency:
+            document.getElementById("currency").value,
+
+        defaultCustomerStatus:
+            document.getElementById("defaultCustomerStatus").value,
+
+        defaultPaymentStatus:
+            document.getElementById("defaultPaymentStatus").value,
+
+        sessionTimeout:
+            document.getElementById("sessionTimeout").value,
+
+        timezone:
+            document.getElementById("timezone").value
+
+    };
+
+
+    if (!settings.businessName) {
+
+        showMessage(
+            "Business name is required.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "RIS_settings",
+        JSON.stringify(settings)
+    );
+
+
+    showMessage(
+        "Settings saved successfully.",
+        "success"
+    );
+
+}
+
+
+/* =====================================================
+   ADMIN ACCOUNT
+===================================================== */
+
+function changeAdminAccount() {
+
+    const username =
+        document.getElementById("adminUsername").value.trim();
+
+    const currentPassword =
+        document.getElementById("currentPassword").value;
+
+    const newPassword =
+        document.getElementById("newPassword").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+
+    const oldUsername =
+        localStorage.getItem("RIS_admin_username") || "admin";
+
+    const oldPassword =
+        localStorage.getItem("RIS_admin_password") || "admin123";
+
+
+    if (!username) {
+
+        showMessage(
+            "Admin username is required.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (currentPassword !== oldPassword) {
+
+        showMessage(
+            "Current password is incorrect.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (newPassword.length < 6) {
+
+        showMessage(
+            "New password must contain at least 6 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (newPassword !== confirmPassword) {
+
+        showMessage(
+            "New passwords do not match.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "RIS_admin_username",
+        username
+    );
+
+
+    localStorage.setItem(
+        "RIS_admin_password",
+        newPassword
+    );
+
+
+    showMessage(
+        "Admin account updated successfully.",
+        "success"
+    );
+
+
+    document.getElementById("currentPassword").value = "";
+
+    document.getElementById("newPassword").value = "";
+
+    document.getElementById("confirmPassword").value = "";
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(text, type) {
+
+    const message =
+        document.getElementById("message");
+
+    message.textContent = text;
+
+    message.className = type;
+
+    setTimeout(function() {
+
+        message.className = "";
+
+    }, 4000);
+
+}
+
+
+/* =====================================================
+   DATA MANAGEMENT
+===================================================== */
+
+function resetPackages() {
+
+    if (!confirm(
+        "Reset packages to the default RIS packages?"
+    )) return;
+
+
+    localStorage.removeItem("RIS_packages");
+
+    showMessage(
+        "Packages reset successfully.",
+        "success"
+    );
+
+}
+
+
+function clearVouchers() {
+
+    if (!confirm(
+        "Delete all vouchers?"
+    )) return;
+
+
+    localStorage.removeItem("RIS_vouchers");
+
+    showMessage(
+        "All vouchers deleted.",
+        "success"
+    );
+
+}
+
+
+function clearPayments() {
+
+    if (!confirm(
+        "Delete all payment records?"
+    )) return;
+
+
+    localStorage.removeItem("RIS_payments");
+
+    showMessage(
+        "All payments deleted.",
+        "success"
+    );
+
+}
+
+
+function clearUsage() {
+
+    if (!confirm(
+        "Delete all usage records?"
+    )) return;
+
+
+    localStorage.removeItem("RIS_usage");
+
+    showMessage(
+        "All usage records deleted.",
+        "success"
+    );
+
+}
+
+
+function clearCustomers() {
+
+    if (!confirm(
+        "Delete ALL customers?"
+    )) return;
+
+
+    localStorage.removeItem("RIS_customers");
+
+    showMessage(
+        "All customers deleted.",
+        "success"
+    );
+
+}
+
+
+function resetEverything() {
+
+    if (!confirm(
+        "WARNING!\n\nThis will delete ALL RIS data. Continue?"
+    )) return;
+
+
+    if (!confirm(
+        "FINAL CONFIRMATION: Reset the entire RIS system?"
+    )) return;
+
+
+    localStorage.removeItem("RIS_customers");
+
+    localStorage.removeItem("RIS_packages");
+
+    localStorage.removeItem("RIS_vouchers");
+
+    localStorage.removeItem("RIS_payments");
+
+    localStorage.removeItem("RIS_routers");
+
+    localStorage.removeItem("RIS_usage");
+
+    localStorage.removeItem("RIS_settings");
+
+
+    alert(
+        "RIS has been reset."
+    );
+
+
+    window.location.reload();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logoutAdmin() {
+
+    if (typeof secureAdminLogout === "function") {
+
+        secureAdminLogout();
+
+    } else {
+
+        localStorage.removeItem("RIS_admin_session");
+
+        window.location.href = "admin-login.html";
+
+    }
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadSettings
+);
+
+</script>
+
+</body>
+</html>

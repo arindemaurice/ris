@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Internet Bill - RIS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 18px 25px;
+        }
+
+        .header-inner {
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .summary {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 25px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+
+        .methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .method {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+        }
+
+        .method:hover {
+            border-color: #111827;
+        }
+
+        .method.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .method-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .method-title {
+            font-weight: bold;
+        }
+
+        .method small {
+            color: #6b7280;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: .92;
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 9px;
+            display: none;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media(max-width: 600px) {
+            .methods {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin: 20px auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="logo">RIS</div>
+        <div>Secure Payment</div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>Pay Your Internet Bill</h1>
+
+        <p class="subtitle">
+            Choose your preferred payment method.
+        </p>
+
+        <div class="summary">
+
+            <div class="row">
+                <span>Customer</span>
+                <strong id="customerName">Loading...</strong>
+            </div>
+
+            <div class="row">
+                <span>Customer ID</span>
+                <strong id="customerId">Loading...</strong>
+            </div>
+
+            <div class="row">
+                <span>Package</span>
+                <strong id="packageName">Loading...</strong>
+            </div>
+
+            <div class="row">
+                <span>Amount</span>
+                <strong class="amount" id="amount">UGX 0</strong>
+            </div>
+
+        </div>
+
+        <label>Email</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="customer@example.com"
+        >
+
+        <label>Phone Number</label>
+        <input
+            type="tel"
+            id="phone"
+            placeholder="0700000000"
+        >
+
+        <label>Payment Method</label>
+
+        <div class="methods">
+
+            <div class="method selected" data-method="mobile_money">
+                <div class="method-icon">📱</div>
+                <div class="method-title">Mobile Money</div>
+                <small>MTN / Airtel</small>
+            </div>
+
+            <div class="method" data-method="card">
+                <div class="method-icon">💳</div>
+                <div class="method-title">Card</div>
+                <small>Visa / Mastercard</small>
+            </div>
+
+            <div class="method" data-method="bank">
+                <div class="method-icon">🏦</div>
+                <div class="method-title">Bank</div>
+                <small>Available options</small>
+            </div>
+
+        </div>
+
+        <button id="payButton">
+            Continue to Secure Payment
+        </button>
+
+        <div id="message" class="message"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+const API_URL = "http://127.0.0.1:5000";
+
+let customer = null;
+let selectedMethod = "mobile_money";
+
+
+/* ---------------------------------------------
+   LOAD CUSTOMER
+--------------------------------------------- */
+
+function loadCustomer() {
+
+   const sessionRaw = localStorage.getItem("RIS_customer_session");
+
+if (!sessionRaw) {
+    window.location.href = "customer-login.html";
+    return;
+}
+
+const customers =
+    JSON.parse(localStorage.getItem("RIS_customers")) || [];
+
+let session = sessionRaw;
+
+/*
+   The customer login may store either:
+   - a simple customer ID
+   - a username
+   - a JSON session object
+*/
+
+try {
+    const parsed = JSON.parse(sessionRaw);
+
+    if (typeof parsed === "object" && parsed !== null) {
+        session =
+            parsed.customerId ||
+            parsed.id ||
+            parsed.username ||
+            parsed.userId ||
+            "";
+    }
+} catch (error) {
+    // Session is a normal text value.
+}
+
+customer = customers.find(c =>
+    String(c.id || "") === String(session) ||
+    String(c.customerId || "") === String(session) ||
+    String(c.username || "") === String(session) ||
+    String(c.userId || "") === String(session)
+);
+
+if (!customer) {
+
+    console.log("RIS session:", session);
+    console.log("RIS customers:", customers);
+
+    showMessage(
+        "Your customer session could not be matched to a customer account. Please log out and log in again.",
+        "error"
+    );
+
+    return;
+}
+    if (!customer) {
+
+        showMessage(
+            "Customer account could not be found.",
+            "error"
+        );
+
+        return;
+    }
+
+    document.getElementById("customerName").textContent =
+        customer.fullName || customer.name || "-";
+
+    document.getElementById("customerId").textContent =
+        customer.customerId || customer.id || "-";
+
+    document.getElementById("packageName").textContent =
+        customer.packageName || customer.package || "-";
+
+    const amount =
+        Number(customer.packagePrice || customer.price || 0);
+
+    document.getElementById("amount").textContent =
+        "UGX " + amount.toLocaleString();
+
+    document.getElementById("email").value =
+        customer.email || "";
+
+    document.getElementById("phone").value =
+        customer.phone || "";
+}
+
+
+/* ---------------------------------------------
+   PAYMENT METHOD
+--------------------------------------------- */
+
+document.querySelectorAll(".method").forEach(method => {
+
+    method.addEventListener("click", function() {
+
+        document.querySelectorAll(".method")
+            .forEach(item => item.classList.remove("selected"));
+
+        this.classList.add("selected");
+
+        selectedMethod =
+            this.getAttribute("data-method");
+    });
+
+});
+
+
+/* ---------------------------------------------
+   MESSAGE
+--------------------------------------------- */
+
+function showMessage(message, type) {
+
+    const element =
+        document.getElementById("message");
+
+    element.textContent = message;
+
+    element.className =
+        "message " + type;
+
+    element.style.display = "block";
+}
+
+
+/* ---------------------------------------------
+   PAY NOW
+--------------------------------------------- */
+
+document.getElementById("payButton")
+    .addEventListener("click", async function() {
+
+    if (!customer) {
+
+        showMessage(
+            "Customer information is not available.",
+            "error"
+        );
+
+        return;
+    }
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const amount =
+        Number(customer.packagePrice || customer.price || 0);
+
+    if (!email) {
+
+        showMessage(
+            "Please enter your email address.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (!phone) {
+
+        showMessage(
+            "Please enter your phone number.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (!amount || amount <= 0) {
+
+        showMessage(
+            "Invalid payment amount.",
+            "error"
+        );
+
+        return;
+    }
+
+    const button = this;
+
+    button.disabled = true;
+
+    button.textContent =
+        "Creating secure payment...";
+
+    showMessage(
+        "Connecting to payment gateway...",
+        "success"
+    );
+
+
+    try {
+
+        const response = await fetch(
+            API_URL + "/api/payments/flutterwave",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    customer_id:
+                        customer.customerId ||
+                        customer.id,
+
+                    customer_name:
+                        customer.fullName ||
+                        customer.name,
+
+                    email: email,
+
+                    phone: phone,
+
+                    amount: amount
+
+                })
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        if (!response.ok || !result.success) {
+
+            console.error(result);
+
+            throw new Error(
+                result.message ||
+                "Payment could not be created."
+            );
+        }
+
+
+        /*
+         * Flutterwave returns a hosted
+         * checkout URL.
+         */
+
+        if (result.payment_link) {
+
+            showMessage(
+                "Payment created. Opening secure checkout...",
+                "success"
+            );
+
+            setTimeout(() => {
+
+                window.location.href =
+                    result.payment_link;
+
+            }, 800);
+
+            return;
+        }
+
+
+        throw new Error(
+            "Payment link was not returned."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to connect to the payment server.",
+            "error"
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            "Continue to Secure Payment";
+    }
+
+});
+
+
+/* ---------------------------------------------
+   START
+--------------------------------------------- */
+
+loadCustomer();
+
+</script>
+
+</body>
+</html>

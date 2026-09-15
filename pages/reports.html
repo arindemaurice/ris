@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - RIS</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .reports-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 245px;
+            background: #111827;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+
+        .brand {
+            padding: 0 12px 25px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+            margin-bottom: 20px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 25px;
+            letter-spacing: 1px;
+        }
+
+        .brand span {
+            color: #60a5fa;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 5px;
+            color: #9ca3af;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin: 18px 12px 8px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 13px;
+            margin: 4px 0;
+            color: #d1d5db;
+            text-decoration: none;
+            border-radius: 9px;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .sidebar a:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .topbar p {
+            margin: 7px 0 0;
+            color: #6b7280;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-light {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+
+        /* SUMMARY CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 21px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.04);
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-sub {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* PERFORMANCE */
+        .section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.04);
+        }
+
+        .section-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #eef0f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .section-header p {
+            margin: 5px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .chart-area {
+            padding: 25px;
+        }
+
+        .chart {
+            height: 290px;
+            display: flex;
+            align-items: flex-end;
+            gap: 14px;
+            padding: 20px 10px 0;
+            border-bottom: 1px solid #dfe3e8;
+            position: relative;
+        }
+
+        .chart-grid {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 20px;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .grid-line {
+            border-top: 1px dashed #e5e7eb;
+            width: 100%;
+        }
+
+        .bar-group {
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bar {
+            width: 48px;
+            max-width: 70%;
+            min-height: 4px;
+            background: #2563eb;
+            border-radius: 7px 7px 0 0;
+            transition: .25s;
+        }
+
+        .bar:hover {
+            background: #1d4ed8;
+            transform: translateY(-3px);
+        }
+
+        .bar-value {
+            font-size: 11px;
+            color: #374151;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .bar-label {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .performance-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .performance-box {
+            padding: 16px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #edf0f4;
+        }
+
+        .performance-box span {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .performance-box strong {
+            display: block;
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        /* REPORT GRID */
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            padding: 0 20px 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 10px;
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 14px 10px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .empty {
+            text-align: center;
+            color: #9ca3af;
+            padding: 30px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .reports-layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 18px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .performance-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                display: block;
+            }
+
+            .top-actions {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="reports-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>R<span>IS</span></h2>
+            <small>Reliable Internet Services</small>
+        </div>
+
+        <div class="nav-title">Main</div>
+
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="customers.html">Customers</a>
+        <a href="packages.html">Packages</a>
+        <a href="vouchers.html">Vouchers</a>
+        <a href="payments.html">Payments</a>
+        <a href="routers.html">Routers</a>
+        <a href="usage.html">Usage</a>
+        <a href="reports.html" class="active">Reports</a>
+
+        <div class="nav-title">System</div>
+
+        <a href="settings.html">Settings</a>
+        <a href="../index.html">Public Website</a>
+        <a href="#" onclick="logoutAdmin()">Logout</a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <h1>Reports & Analytics</h1>
+                <p>Monitor your RIS business performance and network activity.</p>
+            </div>
+
+            <div class="top-actions">
+                <button class="btn-light" onclick="window.print()">
+                    Print Report
+                </button>
+
+                <button class="btn-primary" onclick="exportPayments()">
+                    Export Payments
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SUMMARY -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-value" id="totalRevenue">UGX 0</div>
+                <div class="stat-sub">All recorded paid payments</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Customers</div>
+                <div class="stat-value" id="totalCustomers">0</div>
+                <div class="stat-sub" id="activeCustomerText">0 active</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Vouchers</div>
+                <div class="stat-value" id="totalVouchers">0</div>
+                <div class="stat-sub" id="unusedVoucherText">0 unused</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Data Usage</div>
+                <div class="stat-value" id="totalData">0 MB</div>
+                <div class="stat-sub">Recorded network usage</div>
+            </div>
+
+        </div>
+
+
+        <!-- PERFORMANCE ANALYTICS -->
+        <section class="section">
+
+            <div class="section-header">
+                <div>
+                    <h2>Performance Analytics</h2>
+                    <p>Revenue performance over the last six months.</p>
+                </div>
+            </div>
+
+            <div class="chart-area">
+
+                <div class="chart" id="revenueChart">
+
+                    <div class="chart-grid">
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                    </div>
+
+                </div>
+
+                <div class="performance-summary">
+
+                    <div class="performance-box">
+                        <span>This Month Revenue</span>
+                        <strong id="monthRevenue">UGX 0</strong>
+                    </div>
+
+                    <div class="performance-box">
+                        <span>Average Monthly Revenue</span>
+                        <strong id="averageRevenue">UGX 0</strong>
+                    </div>
+
+                    <div class="performance-box">
+                        <span>Online Routers</span>
+                        <strong id="onlineRouters">0</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- REPORT TABLES -->
+        <div class="report-grid">
+
+            <!-- CUSTOMER REPORT -->
+            <section class="section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Customer Overview</h2>
+                        <p>Current customer service status.</p>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Package</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="customerReport"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- PACKAGE REPORT -->
+            <section class="section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Package Performance</h2>
+                        <p>Customers grouped by package.</p>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Package</th>
+                                <th>Customers</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="packageReport"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- VOUCHER REPORT -->
+            <section class="section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Voucher Overview</h2>
+                        <p>Voucher usage and availability.</p>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="voucherReport"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ROUTER REPORT -->
+            <section class="section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Router Overview</h2>
+                        <p>Current router connectivity.</p>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Router</th>
+                                <th>IP Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="routerReport"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- PAYMENT REPORT -->
+        <section class="section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Payment Report</h2>
+                    <p>Latest recorded customer payments.</p>
+                </div>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="paymentReport"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../js/admin-auth.js"></script>
+<script src="../js/security.js"></script>
+
+<script>
+
+    /* ADMIN SECURITY */
+    requireAdminLogin();
+
+    if (typeof secureAdminPage === "function") {
+        secureAdminPage();
+    }
+
+    if (typeof startSecurityMonitor === "function") {
+        startSecurityMonitor("admin");
+    }
+
+    if (typeof startActivityTracking === "function") {
+        startActivityTracking("admin");
+    }
+
+
+    /* DATA HELPERS */
+
+    function getData(key, fallback = []) {
+
+        try {
+
+            const data = JSON.parse(localStorage.getItem(key));
+
+            return Array.isArray(data) ? data : fallback;
+
+        } catch (error) {
+
+            return fallback;
+
+        }
+
+    }
+
+
+    function money(amount) {
+
+        return "UGX " + Number(amount || 0).toLocaleString();
+
+    }
+
+
+    function getMonthKey(date) {
+
+        const d = new Date(date);
+
+        if (isNaN(d.getTime())) return "";
+
+        return d.getFullYear() + "-" +
+            String(d.getMonth() + 1).padStart(2, "0");
+
+    }
+
+
+    function getLastSixMonths() {
+
+        const months = [];
+
+        const now = new Date();
+
+        for (let i = 5; i >= 0; i--) {
+
+            const d = new Date(
+                now.getFullYear(),
+                now.getMonth() - i,
+                1
+            );
+
+            months.push({
+
+                key:
+                    d.getFullYear() +
+                    "-" +
+                    String(d.getMonth() + 1).padStart(2, "0"),
+
+                label:
+                    d.toLocaleString("en-US", {
+                        month: "short"
+                    })
+
+            });
+
+        }
+
+        return months;
+
+    }
+
+
+    /* LOAD REPORTS */
+
+    function loadReports() {
+
+        const customers = getData("RIS_customers");
+        const packages = getData("RIS_packages");
+        const vouchers = getData("RIS_vouchers");
+        const payments = getData("RIS_payments");
+        const routers = getData("RIS_routers");
+        const usage = getData("RIS_usage");
+
+
+        /* CUSTOMER STATS */
+
+        const activeCustomers =
+            customers.filter(c =>
+                String(c.status).toLowerCase() === "active"
+            ).length;
+
+        document.getElementById("totalCustomers").textContent =
+            customers.length;
+
+        document.getElementById("activeCustomerText").textContent =
+            activeCustomers + " active";
+
+
+        /* REVENUE */
+
+        const paidPayments = payments.filter(p => {
+
+            const status =
+                String(p.status || "Paid").toLowerCase();
+
+            return status === "paid";
+
+        });
+
+        const totalRevenue = paidPayments.reduce(
+            (sum, p) => sum + Number(
+                p.amount ||
+                p.price ||
+                p.total ||
+                0
+            ),
+            0
+        );
+
+        document.getElementById("totalRevenue").textContent =
+            money(totalRevenue);
+
+
+        /* THIS MONTH */
+
+        const now = new Date();
+
+        const currentMonth =
+            now.getFullYear() +
+            "-" +
+            String(now.getMonth() + 1).padStart(2, "0");
+
+        const monthRevenue = paidPayments
+            .filter(p =>
+                getMonthKey(
+                    p.paymentDate ||
+                    p.date ||
+                    p.createdAt
+                ) === currentMonth
+            )
+            .reduce(
+                (sum, p) => sum + Number(
+                    p.amount ||
+                    p.price ||
+                    p.total ||
+                    0
+                ),
+                0
+            );
+
+        document.getElementById("monthRevenue").textContent =
+            money(monthRevenue);
+
+
+        /* VOUCHERS */
+
+        const unused =
+            vouchers.filter(v =>
+                String(v.status).toLowerCase() === "unused"
+            ).length;
+
+        document.getElementById("totalVouchers").textContent =
+            vouchers.length;
+
+        document.getElementById("unusedVoucherText").textContent =
+            unused + " unused";
+
+
+        /* DATA USAGE */
+
+        const totalDownload = usage.reduce(
+            (sum, u) =>
+                sum + Number(u.download || u.downloadMB || 0),
+            0
+        );
+
+        const totalUpload = usage.reduce(
+            (sum, u) =>
+                sum + Number(u.upload || u.uploadMB || 0),
+            0
+        );
+
+        const totalData =
+            totalDownload +
+            totalUpload;
+
+        document.getElementById("totalData").textContent =
+            totalData.toLocaleString() + " MB";
+
+
+        /* ROUTERS */
+
+        const online =
+            routers.filter(r =>
+                String(r.status).toLowerCase() === "online"
+            ).length;
+
+        document.getElementById("onlineRouters").textContent =
+            online;
+
+
+        /* CHART */
+
+        buildRevenueChart(paidPayments);
+
+
+        /* CUSTOMER REPORT */
+
+        const customerBody =
+            document.getElementById("customerReport");
+
+        customerBody.innerHTML = "";
+
+        if (!customers.length) {
+
+            customerBody.innerHTML =
+                '<tr><td colspan="3" class="empty">No customers found.</td></tr>';
+
+        } else {
+
+            customers.slice(0, 8).forEach(customer => {
+
+                const row =
+                    document.createElement("tr");
+
+                let badge = "badge-info";
+
+                if (
+                    String(customer.status).toLowerCase()
+                    === "active"
+                ) {
+                    badge = "badge-success";
+                }
+
+                if (
+                    String(customer.status).toLowerCase()
+                    === "expired"
+                ) {
+                    badge = "badge-danger";
+                }
+
+                row.innerHTML = `
+                    <td>
+                        <strong>${escapeHTML(customer.name || customer.fullName || "Unknown")}</strong>
+                    </td>
+
+                    <td>
+                        ${escapeHTML(customer.packageName || customer.package || "—")}
+                    </td>
+
+                    <td>
+                        <span class="badge ${badge}">
+                            ${escapeHTML(customer.status || "Unknown")}
+                        </span>
+                    </td>
+                `;
+
+                customerBody.appendChild(row);
+
+            });
+
+        }
+
+
+        /* PACKAGE REPORT */
+
+        const packageBody =
+            document.getElementById("packageReport");
+
+        packageBody.innerHTML = "";
+
+        if (!packages.length) {
+
+            packageBody.innerHTML =
+                '<tr><td colspan="3" class="empty">No packages found.</td></tr>';
+
+        } else {
+
+            packages.forEach(pkg => {
+
+                const count =
+                    customers.filter(c =>
+                        c.packageId === pkg.id ||
+                        c.package === pkg.name ||
+                        c.packageName === pkg.name
+                    ).length;
+
+                const row =
+                    document.createElement("tr");
+
+                const active =
+                    pkg.status === "Active" ||
+                    pkg.active === true;
+
+                row.innerHTML = `
+                    <td>
+                        <strong>${escapeHTML(pkg.name || "Unnamed")}</strong>
+                    </td>
+
+                    <td>${count}</td>
+
+                    <td>
+                        <span class="badge ${
+                            active
+                            ? "badge-success"
+                            : "badge-warning"
+                        }">
+                            ${active ? "Active" : "Inactive"}
+                        </span>
+                    </td>
+                `;
+
+                packageBody.appendChild(row);
+
+            });
+
+        }
+
+
+        /* VOUCHER REPORT */
+
+        const voucherBody =
+            document.getElementById("voucherReport");
+
+        voucherBody.innerHTML = "";
+
+        const voucherStatuses = [
+            "Unused",
+            "Used",
+            "Expired",
+            "Disabled"
+        ];
+
+        voucherStatuses.forEach(status => {
+
+            const count =
+                vouchers.filter(v =>
+                    String(v.status).toLowerCase() ===
+                    status.toLowerCase()
+                ).length;
+
+            const row =
+                document.createElement("tr");
+
+            row.innerHTML = `
+                <td>
+                    <span class="badge ${
+                        status === "Unused"
+                        ? "badge-success"
+                        : status === "Used"
+                        ? "badge-info"
+                        : status === "Expired"
+                        ? "badge-danger"
+                        : "badge-warning"
+                    }">
+                        ${status}
+                    </span>
+                </td>
+
+                <td>${count}</td>
+            `;
+
+            voucherBody.appendChild(row);
+
+        });
+
+
+        /* ROUTER REPORT */
+
+        const routerBody =
+            document.getElementById("routerReport");
+
+        routerBody.innerHTML = "";
+
+        if (!routers.length) {
+
+            routerBody.innerHTML =
+                '<tr><td colspan="3" class="empty">No routers found.</td></tr>';
+
+        } else {
+
+            routers.slice(0, 8).forEach(router => {
+
+                const onlineStatus =
+                    String(router.status).toLowerCase()
+                    === "online";
+
+                const row =
+                    document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>
+                        <strong>${escapeHTML(router.name || "Router")}</strong>
+                    </td>
+
+                    <td>
+                        ${escapeHTML(router.ip || "—")}
+                    </td>
+
+                    <td>
+                        <span class="badge ${
+                            onlineStatus
+                            ? "badge-success"
+                            : "badge-danger"
+                        }">
+                            ${escapeHTML(router.status || "Offline")}
+                        </span>
+                    </td>
+                `;
+
+                routerBody.appendChild(row);
+
+            });
+
+        }
+
+
+        /* PAYMENT REPORT */
+
+        const paymentBody =
+            document.getElementById("paymentReport");
+
+        paymentBody.innerHTML = "";
+
+        if (!payments.length) {
+
+            paymentBody.innerHTML =
+                '<tr><td colspan="5" class="empty">No payments found.</td></tr>';
+
+        } else {
+
+            payments
+                .slice()
+                .reverse()
+                .slice(0, 12)
+                .forEach(payment => {
+
+                    const customer =
+                        customers.find(c =>
+                            c.id === payment.customerId
+                        );
+
+                    const row =
+                        document.createElement("tr");
+
+                    const status =
+                        payment.status || "Paid";
+
+                    row.innerHTML = `
+                        <td>
+                            ${escapeHTML(
+                                payment.paymentDate ||
+                                payment.date ||
+                                "—"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                customer?.name ||
+                                customer?.fullName ||
+                                payment.customerName ||
+                                "Unknown"
+                            )}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${money(
+                                    payment.amount ||
+                                    payment.price ||
+                                    payment.total ||
+                                    0
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                payment.method ||
+                                payment.paymentMethod ||
+                                "—"
+                            )}
+                        </td>
+
+                        <td>
+                            <span class="badge badge-success">
+                                ${escapeHTML(status)}
+                            </span>
+                        </td>
+                    `;
+
+                    paymentBody.appendChild(row);
+
+                });
+
+        }
+
+    }
+
+
+    /* REVENUE CHART */
+
+    function buildRevenueChart(payments) {
+
+        const chart =
+            document.getElementById("revenueChart");
+
+        const months =
+            getLastSixMonths();
+
+        const values =
+            months.map(month => {
+
+                return payments
+                    .filter(p =>
+                        getMonthKey(
+                            p.paymentDate ||
+                            p.date ||
+                            p.createdAt
+                        ) === month.key
+                    )
+                    .reduce(
+                        (sum, p) =>
+                            sum + Number(
+                                p.amount ||
+                                p.price ||
+                                p.total ||
+                                0
+                            ),
+                        0
+                    );
+
+            });
+
+
+        const max =
+            Math.max(...values, 1);
+
+        const average =
+            values.reduce(
+                (a, b) => a + b,
+                0
+            ) / values.length;
+
+        document.getElementById(
+            "averageRevenue"
+        ).textContent = money(average);
+
+
+        chart.innerHTML = `
+            <div class="chart-grid">
+                <div class="grid-line"></div>
+                <div class="grid-line"></div>
+                <div class="grid-line"></div>
+                <div class="grid-line"></div>
+                <div class="grid-line"></div>
+            </div>
+        `;
+
+
+        months.forEach((month, index) => {
+
+            const value = values[index];
+
+            const height =
+                value === 0
+                ? 3
+                : Math.max(
+                    5,
+                    (value / max) * 235
+                );
+
+            const group =
+                document.createElement("div");
+
+            group.className = "bar-group";
+
+            group.innerHTML = `
+                <div class="bar-value">
+                    ${formatShortMoney(value)}
+                </div>
+
+                <div
+                    class="bar"
+                    style="height:${height}px"
+                    title="${money(value)}"
+                ></div>
+
+                <div class="bar-label">
+                    ${month.label}
+                </div>
+            `;
+
+            chart.appendChild(group);
+
+        });
+
+    }
+
+
+    function formatShortMoney(value) {
+
+        value = Number(value || 0);
+
+        if (value >= 1000000) {
+
+            return "UGX " +
+                (value / 1000000)
+                    .toFixed(1) +
+                "M";
+
+        }
+
+        if (value >= 1000) {
+
+            return "UGX " +
+                (value / 1000)
+                    .toFixed(0) +
+                "K";
+
+        }
+
+        return "UGX " + value;
+
+    }
+
+
+    /* CSV EXPORT */
+
+    function exportPayments() {
+
+        const payments =
+            getData("RIS_payments");
+
+        const customers =
+            getData("RIS_customers");
+
+        if (!payments.length) {
+
+            alert("There are no payments to export.");
+
+            return;
+
+        }
+
+        let csv =
+            "Date,Customer,Amount,Method,Status,Reference\n";
+
+
+        payments.forEach(payment => {
+
+            const customer =
+                customers.find(c =>
+                    c.id === payment.customerId
+                );
+
+            const name =
+                customer?.name ||
+                customer?.fullName ||
+                payment.customerName ||
+                "Unknown";
+
+            csv += [
+                payment.paymentDate ||
+                payment.date ||
+                "",
+
+                name,
+
+                payment.amount ||
+                payment.price ||
+                payment.total ||
+                0,
+
+                payment.method ||
+                payment.paymentMethod ||
+                "",
+
+                payment.status ||
+                "Paid",
+
+                payment.reference ||
+                payment.transactionReference ||
+                ""
+
+            ]
+            .map(value =>
+                `"${String(value).replace(/"/g, '""')}"`
+            )
+            .join(",") + "\n";
+
+        });
+
+
+        const blob =
+            new Blob(
+                [csv],
+                { type: "text/csv;charset=utf-8;" }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "RIS-Payment-Report.csv";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+    }
+
+
+    /* SECURITY */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    function logoutAdmin() {
+
+        if (
+            typeof secureAdminLogout === "function"
+        ) {
+
+            secureAdminLogout();
+
+        } else {
+
+            localStorage.removeItem(
+                "RIS_admin_session"
+            );
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+    }
+
+
+    /* START */
+
+    loadReports();
+
+</script>
+
+</body>
+</html>

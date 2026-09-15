@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RIS Payment Result</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+            background: white;
+            border-radius: 18px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 800;
+            color: #1769ff;
+            margin-bottom: 25px;
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #eef4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 38px;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            color: #172033;
+        }
+
+        p {
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        .details {
+            margin-top: 25px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: left;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #667085;
+        }
+
+        .value {
+            font-weight: 700;
+            color: #172033;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .success {
+            color: #14804a;
+        }
+
+        .failed {
+            color: #c62828;
+        }
+
+        .pending {
+            color: #b26a00;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 22px;
+            background: #1769ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="logo">RIS</div>
+
+    <div class="icon" id="icon">⏳</div>
+
+    <h1 id="title">Verifying Payment...</h1>
+
+    <p id="message">
+        Please wait while RIS confirms your payment with Flutterwave.
+    </p>
+
+    <div class="details">
+
+        <div class="row">
+            <span class="label">Transaction</span>
+            <span class="value" id="txRef">Checking...</span>
+        </div>
+
+        <div class="row">
+            <span class="label">Status</span>
+            <span class="value" id="status">Verifying...</span>
+        </div>
+
+        <div class="row">
+            <span class="label">Amount</span>
+            <span class="value" id="amount">-</span>
+        </div>
+
+    </div>
+
+    <a href="customer-portal.html" class="button">
+        Return to Customer Portal
+    </a>
+
+</div>
+
+<script>
+
+const API_URL = "http://localhost:5000";
+
+const params = new URLSearchParams(window.location.search);
+
+const flutterwaveStatus = params.get("status");
+const txRef = params.get("tx_ref");
+const transactionId = params.get("transaction_id");
+
+const icon = document.getElementById("icon");
+const title = document.getElementById("title");
+const message = document.getElementById("message");
+const txRefElement = document.getElementById("txRef");
+const statusElement = document.getElementById("status");
+const amountElement = document.getElementById("amount");
+
+txRefElement.textContent = txRef || "Not available";
+
+
+async function verifyPayment() {
+
+    if (!txRef) {
+
+        icon.textContent = "❌";
+
+        title.textContent = "Payment Information Missing";
+        title.className = "failed";
+
+        message.textContent =
+            "RIS could not find the transaction reference.";
+
+        statusElement.textContent = "Unknown";
+        statusElement.className = "failed";
+
+        return;
+    }
+
+
+    if (
+        flutterwaveStatus === "cancelled" ||
+        flutterwaveStatus === "failed"
+    ) {
+
+        icon.textContent = "❌";
+
+        title.textContent = "Payment Not Completed";
+        title.className = "failed";
+
+        message.textContent =
+            "The payment was cancelled or was not completed.";
+
+        statusElement.textContent = flutterwaveStatus;
+        statusElement.className = "failed";
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/payments/verify/${encodeURIComponent(txRef)}`
+        );
+
+        const result = await response.json();
+
+        console.log("RIS verification result:", result);
+
+
+        if (result.payment && result.payment.amount) {
+
+            amountElement.textContent =
+                "UGX " +
+                Number(result.payment.amount).toLocaleString();
+        }
+
+
+        if (result.success === true) {
+
+            icon.textContent = "✓";
+
+            title.textContent = "Payment Successful";
+            title.className = "success";
+
+            message.textContent =
+                "Your payment has been successfully verified by RIS.";
+
+            statusElement.textContent = "Successful";
+            statusElement.className = "success";
+
+            return;
+        }
+
+
+        if (
+            result.payment &&
+            result.payment.status === "pending"
+        ) {
+
+            icon.textContent = "⏳";
+
+            title.textContent = "Payment Processing";
+            title.className = "pending";
+
+            message.textContent =
+                "Your payment is still being processed.";
+
+            statusElement.textContent = "Pending";
+            statusElement.className = "pending";
+
+            return;
+        }
+
+
+        icon.textContent = "❌";
+
+        title.textContent = "Payment Failed";
+        title.className = "failed";
+
+        message.textContent =
+            result.message ||
+            "RIS could not verify the payment.";
+
+        statusElement.textContent =
+            result.payment?.status || "Failed";
+
+        statusElement.className = "failed";
+
+    } catch (error) {
+
+        console.error("Verification error:", error);
+
+        icon.textContent = "⚠️";
+
+        title.textContent = "Verification Error";
+        title.className = "failed";
+
+        message.textContent =
+            "RIS could not connect to the payment server.";
+
+        statusElement.textContent = "Error";
+        statusElement.className = "failed";
+    }
+}
+
+
+verifyPayment();
+
+</script>
+
+</body>
+</html>

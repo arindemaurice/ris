@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>RIS | Add Customer</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+</head>
+
+<body>
+    <script src="../js/admin-auth.js"></script>
+    <script src="../js/security.js"></script>
+
+<script>
+    secureAdminPage();
+    startSecurityMonitor("admin");
+    startActivityTracking("admin");
+</script>
+
+<script>
+    requireAdminLogin();
+</script>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+
+<div class="logo">
+
+    <h2>R<span>IS</span></h2>
+
+    <small>
+        Reliable Internet Services
+    </small>
+
+</div>
+
+
+<div class="nav-title">
+    Main
+</div>
+
+
+<a
+    href="../index.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">⌂</span>
+
+    <span>
+        Dashboard
+    </span>
+
+</a>
+
+
+<a
+    href="customers.html"
+    class="nav-link active"
+>
+
+    <span class="nav-icon">👥</span>
+
+    <span>
+        Customers
+    </span>
+
+</a>
+
+
+<a
+    href="packages.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">📦</span>
+
+    <span>
+        Packages
+    </span>
+
+</a>
+
+
+<a
+    href="vouchers.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">🎟️</span>
+
+    <span>
+        Vouchers
+    </span>
+
+</a>
+
+
+<a
+    href="payments.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">💰</span>
+
+    <span>
+        Payments
+    </span>
+
+</a>
+
+
+<div class="nav-title">
+    Network
+</div>
+
+
+<a
+    href="routers.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">📡</span>
+
+    <span>
+        Routers
+    </span>
+
+</a>
+
+
+<a
+    href="usage.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">📊</span>
+
+    <span>
+        Usage
+    </span>
+
+</a>
+
+
+<div class="nav-title">
+    Management
+</div>
+
+
+<a
+    href="reports.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">📈</span>
+
+    <span>
+        Reports
+    </span>
+
+</a>
+
+
+<a
+    href="settings.html"
+    class="nav-link"
+>
+
+    <span class="nav-icon">⚙️</span>
+
+    <span>
+        Settings
+    </span>
+
+</a>
+
+
+</aside>
+
+<!-- MAIN -->
+
+<main class="main">
+
+<header class="topbar">
+
+
+<div class="page-title">
+    Add Customer
+</div>
+
+
+<div class="user-area">
+
+    <div>
+
+        <div class="user-name">
+            Administrator
+        </div>
+
+        <div class="user-role">
+            Super Admin
+        </div>
+
+    </div>
+
+
+    <div class="avatar">
+        A
+    </div>
+
+</div>
+
+
+</header>
+
+<section class="content">
+
+<div class="toolbar">
+
+
+<div>
+
+    <h1>
+        Add New Customer
+    </h1>
+
+    <p style="color:#64748b;margin-top:5px;">
+        Register a new internet subscriber.
+    </p>
+
+</div>
+
+
+<a
+    href="customers.html"
+    class="btn btn-secondary"
+>
+    ← Back to Customers
+</a>
+
+
+</div>
+
+<div
+    id="message"
+    style="display:none;"
+></div>
+
+<div class="card">
+
+<div class="card-body">
+
+<form id="customerForm">
+
+<!-- PERSONAL INFORMATION -->
+
+<div class="form-section">
+
+
+<div class="section-title">
+    1. Personal Information
+</div>
+
+
+<div class="form-grid">
+
+
+    <div class="form-group">
+
+        <label>
+            Customer ID
+        </label>
+
+        <input
+            type="text"
+            id="customerId"
+            class="form-control"
+            readonly
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Full Name *
+        </label>
+
+        <input
+            type="text"
+            id="fullName"
+            class="form-control"
+            placeholder="Enter customer's full name"
+            required
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Phone Number *
+        </label>
+
+        <input
+            type="tel"
+            id="phone"
+            class="form-control"
+            placeholder="e.g. 0771234567"
+            required
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Email Address
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            class="form-control"
+            placeholder="customer@example.com"
+        >
+
+    </div>
+
+
+    <div class="form-group full">
+
+        <label>
+            Address / Location
+        </label>
+
+        <textarea
+            id="address"
+            class="form-control"
+            placeholder="Enter customer's location or address"
+        ></textarea>
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+<!-- INTERNET SERVICE -->
+
+<div class="form-section">
+
+
+<div class="section-title">
+    2. Internet Service
+</div>
+
+
+<div class="form-grid">
+
+
+    <div class="form-group">
+
+        <label>
+            Internet Package *
+        </label>
+
+        <select
+            id="package"
+            class="form-control"
+            required
+        >
+
+            <option value="">
+                Select an active package
+            </option>
+
+        </select>
+
+
+        <div
+            id="packageInfo"
+            class="package-info"
+            style="display:none;"
+        ></div>
+
+    </div>
+
+
+
+    <div class="form-group">
+
+        <label>
+            Connection Type
+        </label>
+
+        <select
+            id="connectionType"
+            class="form-control"
+        >
+
+            <option value="Hotspot">
+                Hotspot
+            </option>
+
+            <option value="PPPoE">
+                PPPoE
+            </option>
+
+            <option value="Fiber">
+                Fiber
+            </option>
+
+            <option value="Wireless">
+                Wireless
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <div class="form-group">
+
+        <label>
+            Installation Date *
+        </label>
+
+        <input
+            type="date"
+            id="installationDate"
+            class="form-control"
+            required
+        >
+
+    </div>
+
+
+
+    <div class="form-group">
+
+        <label>
+            Expiry Date
+        </label>
+
+        <input
+            type="date"
+            id="expiryDate"
+            class="form-control"
+            readonly
+        >
+
+    </div>
+
+
+
+    <div class="form-group">
+
+        <label>
+            Customer Status
+        </label>
+
+        <select
+            id="status"
+            class="form-control"
+        >
+
+            <option value="Active">
+                Active
+            </option>
+
+            <option value="Inactive">
+                Inactive
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <div class="form-group">
+
+        <label>
+            Payment Status
+        </label>
+
+        <select
+            id="paymentStatus"
+            class="form-control"
+        >
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Unpaid">
+                Unpaid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+        </select>
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+<!-- ACCOUNT -->
+
+<div class="form-section">
+
+
+<div class="section-title">
+    3. Customer Account
+</div>
+
+
+<div class="form-grid">
+
+
+    <div class="form-group">
+
+        <label>
+            Username
+        </label>
+
+        <input
+            type="text"
+            id="username"
+            class="form-control"
+            placeholder="Internet username"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Internet password"
+        >
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="form-actions">
+
+
+<a
+    href="customers.html"
+    class="btn btn-secondary"
+>
+    Cancel
+</a>
+
+
+<button
+    type="reset"
+    class="btn btn-secondary"
+>
+    Clear
+</button>
+
+
+<button
+    type="submit"
+    class="btn btn-primary"
+>
+    Save Customer
+</button>
+
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script src="../js/app.js"></script>
+
+<script>
+
+
+/* =========================
+   GENERATE CUSTOMER ID
+========================= */
+
+function generateCustomerId() {
+
+    document.getElementById("customerId")
+        .value =
+        generateId("CUS");
+
+}
+
+
+
+/* =========================
+   SET DEFAULT DATES
+========================= */
+
+function setDefaultDates() {
+
+    const today =
+        todayString();
+
+
+    document.getElementById(
+        "installationDate"
+    ).value = today;
+
+
+    document.getElementById(
+        "expiryDate"
+    ).value =
+        addDays(today, 30);
+
+}
+
+
+
+/* =========================
+   LOAD PACKAGES
+========================= */
+
+function loadPackages() {
+
+    const packages =
+        getActivePackages();
+
+
+    const select =
+        document.getElementById("package");
+
+
+    select.innerHTML = `
+
+        <option value="">
+            Select an active package
+        </option>
+
+    `;
+
+
+    packages.forEach(pkg => {
+
+        const option =
+            document.createElement("option");
+
+
+        option.value =
+            pkg.id;
+
+
+        option.textContent =
+            `${pkg.name} - ${formatCurrency(pkg.price)}`;
+
+
+        option.dataset.name =
+            pkg.name;
+
+
+        option.dataset.speed =
+            pkg.speed;
+
+
+        option.dataset.unit =
+            pkg.unit;
+
+
+        option.dataset.price =
+            pkg.price;
+
+
+        option.dataset.validity =
+            pkg.validity;
+
+
+        select.appendChild(option);
+
+    });
+
+
+    if (packages.length === 0) {
+
+        showMessage(
+            "message",
+            "No active internet packages exist. Please create a package first.",
+            "warning"
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   CALCULATE EXPIRY
+========================= */
+
+function calculateExpiryDate(validity) {
+
+    const installationDate =
+        document.getElementById(
+            "installationDate"
+        ).value;
+
+
+    if (
+        !installationDate ||
+        !validity
+    ) {
+        return;
+    }
+
+
+    const numberOfDays =
+        parseInt(validity);
+
+
+    if (isNaN(numberOfDays)) {
+        return;
+    }
+
+
+    const expiry =
+        new Date(installationDate);
+
+
+    expiry.setDate(
+        expiry.getDate() +
+        numberOfDays
+    );
+
+
+    const year =
+        expiry.getFullYear();
+
+
+    const month =
+        String(
+            expiry.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const day =
+        String(
+            expiry.getDate()
+        ).padStart(2, "0");
+
+
+    document.getElementById(
+        "expiryDate"
+    ).value =
+        `${year}-${month}-${day}`;
+
+}
+
+
+
+/* =========================
+   PACKAGE SELECTION
+========================= */
+
+document.getElementById("package")
+.addEventListener(
+    "change",
+    function() {
+
+        const selected =
+            this.options[
+                this.selectedIndex
+            ];
+
+
+        const info =
+            document.getElementById(
+                "packageInfo"
+            );
+
+
+        if (!selected.value) {
+
+            info.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        info.innerHTML = `
+
+            <strong>
+                ${selected.dataset.name}
+            </strong>
+
+            <br>
+
+            Speed:
+            ${selected.dataset.speed}
+            ${selected.dataset.unit}
+
+            &nbsp; | &nbsp;
+
+            Price:
+            ${formatCurrency(
+                selected.dataset.price
+            )}
+
+            &nbsp; | &nbsp;
+
+            Validity:
+            ${selected.dataset.validity}
+
+        `;
+
+
+        info.style.display =
+            "block";
+
+
+        calculateExpiryDate(
+            selected.dataset.validity
+        );
+
+    }
+);
+
+
+
+/* =========================
+   INSTALLATION DATE CHANGE
+========================= */
+
+document.getElementById(
+    "installationDate"
+)
+.addEventListener(
+    "change",
+    function() {
+
+        const packageSelect =
+            document.getElementById(
+                "package"
+            );
+
+
+        const selected =
+            packageSelect.options[
+                packageSelect.selectedIndex
+            ];
+
+
+        if (
+            selected &&
+            selected.dataset.validity
+        ) {
+
+            calculateExpiryDate(
+                selected.dataset.validity
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =========================
+   SAVE CUSTOMER
+========================= */
+
+document.getElementById(
+    "customerForm"
+)
+.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const customerId =
+            document.getElementById(
+                "customerId"
+            ).value;
+
+
+        const fullName =
+            document.getElementById(
+                "fullName"
+            ).value.trim();
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value.trim();
+
+
+        const address =
+            document.getElementById(
+                "address"
+            ).value.trim();
+
+
+        const packageSelect =
+            document.getElementById(
+                "package"
+            );
+
+
+        const packageId =
+            packageSelect.value;
+
+
+        const selected =
+            packageSelect.options[
+                packageSelect.selectedIndex
+            ];
+
+
+        const connectionType =
+            document.getElementById(
+                "connectionType"
+            ).value;
+
+
+        const installationDate =
+            document.getElementById(
+                "installationDate"
+            ).value;
+
+
+        const expiryDate =
+            document.getElementById(
+                "expiryDate"
+            ).value;
+
+
+        const status =
+            document.getElementById(
+                "status"
+            ).value;
+
+
+        const paymentStatus =
+            document.getElementById(
+                "paymentStatus"
+            ).value;
+
+
+        const username =
+            document.getElementById(
+                "username"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+
+        /* VALIDATION */
+
+        if (!fullName) {
+
+            showMessage(
+                "message",
+                "Please enter the customer's full name.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+        if (!phone) {
+
+            showMessage(
+                "message",
+                "Please enter the customer's phone number.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+        if (!packageId) {
+
+            showMessage(
+                "message",
+                "Please select an internet package.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+
+        /* LOAD CUSTOMERS */
+
+        const customers =
+            getData(
+                "RIS_customers",
+                []
+            );
+
+
+
+        /* CHECK DUPLICATE PHONE */
+
+        const duplicate =
+            customers.find(
+                customer =>
+                    customer.phone === phone
+            );
+
+
+        if (duplicate) {
+
+            showMessage(
+                "message",
+                "A customer with this phone number already exists.",
+                "danger"
+            );
+
+            return;
+
+        }
+
+
+
+        /* CREATE CUSTOMER */
+
+        const customer = {
+
+            id:
+                customerId,
+
+            fullName:
+                fullName,
+
+            phone:
+                phone,
+
+            email:
+                email,
+
+            address:
+                address,
+
+            packageId:
+                packageId,
+
+            packageName:
+                selected.dataset.name,
+
+            packageSpeed:
+                selected.dataset.speed,
+
+            packageUnit:
+                selected.dataset.unit,
+
+            packagePrice:
+                Number(
+                    selected.dataset.price
+                ),
+
+            packageValidity:
+                selected.dataset.validity,
+
+            connectionType:
+                connectionType,
+
+            installationDate:
+                installationDate,
+
+            expiryDate:
+                expiryDate,
+
+            status:
+                status,
+
+            paymentStatus:
+                paymentStatus,
+
+            username:
+                username,
+
+            password:
+                password,
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+
+        customers.push(customer);
+
+
+        saveData(
+            "RIS_customers",
+            customers
+        );
+
+
+
+        /* SUCCESS */
+
+        showMessage(
+            "message",
+            `Customer ${fullName} was successfully added.`,
+            "success"
+        );
+
+
+
+        /* RESET */
+
+        document.getElementById(
+            "customerForm"
+        ).reset();
+
+
+        document.getElementById(
+            "packageInfo"
+        ).style.display =
+            "none";
+
+
+        generateCustomerId();
+
+
+        setDefaultDates();
+
+    }
+);
+
+
+
+/* =========================
+   RESET BUTTON
+========================= */
+
+document.getElementById(
+    "customerForm"
+)
+.addEventListener(
+    "reset",
+    function() {
+
+        setTimeout(() => {
+
+            document.getElementById(
+                "packageInfo"
+            ).style.display =
+                "none";
+
+
+            generateCustomerId();
+
+
+            setDefaultDates();
+
+        }, 10);
+
+    }
+);
+
+
+
+/* =========================
+   START
+========================= */
+
+loadPackages();
+
+generateCustomerId();
+
+setDefaultDates();
+
+
+</script>
+
+</body>
+
+</html>
