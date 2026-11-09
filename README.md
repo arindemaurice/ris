@@ -69,7 +69,7 @@ This mode is for development and demonstrations only. Do not expose this develop
 
 ## 3. Public website and sign-in redesign (6 November 2026)
 
-The public RIS website has been rebuilt around the SaaS product itself. Its presentation takes inspiration from the clear product storytelling and dashboard preview patterns on Zenifi, and the ISP-specific operational positioning of SopraEnt, while using original RIS copy, layout and branding.
+The public RIS website has been rebuilt around the SaaS product itself. Its presentation takes inspiration from the clear product storytelling and dashboard preview patterns of various billing systems, and the ISP-specific operational positioning of formally worked ISP's, while using original RIS copy, layout and branding.
 
 - Public journey: platform overview → capabilities → private ISP workspace setup → onboarding steps → security model → create workspace / sign in.
 - The public homepage does **not** display internet package catalogues, speed tiers, validity periods, voucher prices or ISP-specific service offers. Those are configured by each ISP after signing in.
