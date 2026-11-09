@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06172c">
+  <meta name="description" content="RIS is a multi-tenant ISP billing, subscriber management and network operations platform for internet service providers.">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/assets/ris-logo.png">
+  <title>RIS | Reliable Internet Solutions</title>
+  <link rel="icon" type="image/png" href="/assets/ris-logo.png">
+  <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+  <div id="app">
+    <div class="boot-screen"><img src="/assets/ris-logo.png" alt="RIS Reliable Internet Solutions"><span>Preparing your workspace…</span></div>
+  </div>
+  <script src="/assets/app.js" defer></script>
+  <script>window.addEventListener("load",function(){setTimeout(function(){var a=document.getElementById("app");if(a&&a.querySelector(".boot-screen")){a.innerHTML="<main style='min-height:100vh;display:grid;place-content:center;padding:32px;background:#07192d;color:#fff;font:16px system-ui;text-align:center'><h1>RIS could not load</h1><p>The page opened, but its interface script did not finish loading.</p><p>Restart the RIS server and refresh this page. Check that /assets/app.js and /assets/app.css load successfully.</p></main>"}},5000)});</script>
+  <script>
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js").catch((error) => console.warn("RIS offline support could not be registered:", error)));
+    }
+  </script>
+</body>
+</html>

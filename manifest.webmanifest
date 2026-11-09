@@ -1,0 +1,13 @@
+{
+  "id": "/",
+  "name": "RIS | Reliable Internet Solutions",
+  "short_name": "RIS",
+  "description": "Multi-tenant ISP billing, subscriber management and network operations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#06172c",
+  "theme_color": "#06172c",
+  "icons": [{ "src": "/assets/ris-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }]
+}
