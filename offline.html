@@ -1,1 +1,500 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#06172c"><title>RIS | Offline</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;background:#06172c;color:#fff;font:16px/1.6 system-ui,sans-serif;text-align:center}.card{max-width:440px}.card img{width:130px;height:auto}.card p{color:#b7cad8}button{border:0;border-radius:9px;padding:12px 18px;background:#14b9d2;color:#06172c;font-weight:700;cursor:pointer}</style></head><body><main class="card"><img src="/assets/ris-logo.png" alt="RIS"><h1>You are offline</h1><p>RIS needs a live connection to load your workspace and securely retrieve current account data. Reconnect, then try again.</p><button onclick="location.reload()">Try again</button></main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06172c">
+<title>RIS | Offline Runner</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ min-height:100vh;
+ display:grid;
+ place-items:center;
+ padding:20px;
+ background:#06172c;
+ color:#fff;
+ font:16px/1.6 system-ui,sans-serif;
+ text-align:center;
+}
+
+.card{width:100%;max-width:650px}
+
+.logo{width:120px;height:auto;margin-bottom:8px}
+
+h1{margin:10px 0;font-size:30px}
+
+p{color:#b7cad8}
+
+.status{
+ display:inline-block;
+ padding:5px 13px;
+ border-radius:30px;
+ background:#392c19;
+ color:#ffca70;
+ font-size:12px;
+ font-weight:700;
+}
+
+.score{
+ color:#14d2e9;
+ font-size:14px;
+ font-weight:800;
+ margin:15px;
+}
+
+.game{
+ position:relative;
+ width:100%;
+ height:200px;
+ margin:20px auto 10px;
+ overflow:hidden;
+ background:linear-gradient(#0b2845,#102e4a);
+ border:1px solid #214a65;
+ border-radius:15px;
+ touch-action:manipulation;
+}
+
+canvas{
+ width:100%;
+ height:100%;
+ display:block;
+}
+
+.controls{
+ color:#8baec4;
+ font-size:13px;
+}
+
+button{
+ border:0;
+ border-radius:9px;
+ padding:12px 22px;
+ background:#14b9d2;
+ color:#06172c;
+ font-weight:800;
+ cursor:pointer;
+ margin:12px 5px;
+}
+
+button:hover{background:#54d9e9}
+
+.footer{
+ margin-top:22px;
+ font-size:12px;
+ color:#63849c;
+}
+</style>
+</head>
+
+<body>
+
+<main class="card">
+
+<img class="logo" src="/assets/ris-logo.png" alt="RIS">
+
+<div>
+<span class="status">● CONNECTION INTERRUPTED</span>
+</div>
+
+<h1>You are offline</h1>
+
+<p>
+RIS needs a live connection to load your workspace
+and securely retrieve current account data.
+</p>
+
+<p>While you reconnect, help our little network robot run!</p>
+
+<div class="score">
+ SCORE: <span id="score">0</span>
+ &nbsp; | &nbsp;
+ BEST: <span id="best">0</span>
+</div>
+
+<div class="game" id="game">
+<canvas id="canvas"></canvas>
+</div>
+
+<div class="controls">
+<b>SPACE / ↑</b> to jump on PC.
+<br>
+<b>Tap the game</b> to jump on mobile.
+<br>
+Avoid the network obstacles and beat your high score!
+</div>
+
+<button onclick="location.reload()">Try reconnecting</button>
+
+<div class="footer">
+RIS • Fast. Reliable. Connected.
+<br>
+Offline Runner Edition
+</div>
+
+</main>
+
+<script>
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+let w,h;
+let player;
+let obstacles=[];
+let score=0;
+let speed=4;
+let frame=0;
+let running=false;
+let gameOver=false;
+let animationId;
+
+let best=Number(localStorage.getItem("risBest")||0);
+
+document.getElementById("best").textContent=best;
+
+// Canvas sizing
+function resize(){
+ const rect=canvas.getBoundingClientRect();
+ const dpr=window.devicePixelRatio||1;
+
+ w=rect.width;
+ h=rect.height;
+
+ canvas.width=w*dpr;
+ canvas.height=h*dpr;
+
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+
+ if(!running)draw();
+}
+
+// Start or restart game
+function reset(){
+ cancelAnimationFrame(animationId);
+
+ player={
+  x:45,
+  y:h-48,
+  velocity:0,
+  grounded:true,
+  runFrame:0,
+  size:30
+ };
+
+ obstacles=[];
+ score=0;
+ speed=4;
+ frame=0;
+ running=true;
+ gameOver=false;
+
+ document.getElementById("score").textContent=0;
+
+ animationId=requestAnimationFrame(loop);
+}
+
+// Jump
+function jump(){
+ if(gameOver){
+  reset();
+  return;
+ }
+
+ if(!running)return;
+
+ if(player.grounded){
+  player.velocity=-12;
+  player.grounded=false;
+ }
+}
+
+// Draw animated RIS robot
+function drawPlayer(){
+
+ const p=player;
+ const phase=Math.sin(p.runFrame);
+ const bounce=p.grounded?Math.abs(phase)*2:0;
+
+ const leg=p.grounded?phase*8:0;
+ const arm=p.grounded?phase*5:0;
+
+ ctx.save();
+ ctx.translate(p.x,p.y-bounce);
+
+ // Legs
+ ctx.strokeStyle="#14b9d2";
+ ctx.lineWidth=5;
+ ctx.lineCap="round";
+
+ ctx.beginPath();
+ ctx.moveTo(9,24);
+ ctx.lineTo(9-leg,32);
+ ctx.lineTo(7-leg,35);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(21,24);
+ ctx.lineTo(21+leg,32);
+ ctx.lineTo(23+leg,35);
+ ctx.stroke();
+
+ // Feet
+ ctx.strokeStyle="#8ceeff";
+ ctx.lineWidth=4;
+
+ ctx.beginPath();
+ ctx.moveTo(7-leg,35);
+ ctx.lineTo(13-leg,35);
+ ctx.moveTo(23+leg,35);
+ ctx.lineTo(29+leg,35);
+ ctx.stroke();
+
+ // Arms
+ ctx.strokeStyle="#14b9d2";
+ ctx.lineWidth=4;
+
+ ctx.beginPath();
+ ctx.moveTo(5,13);
+ ctx.lineTo(1-arm,20);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(25,13);
+ ctx.lineTo(29+arm,20);
+ ctx.stroke();
+
+ // Body
+ ctx.fillStyle="#14b9d2";
+ ctx.beginPath();
+ ctx.roundRect(0,0,30,27,8);
+ ctx.fill();
+
+ // Face
+ ctx.fillStyle="#06172c";
+
+ ctx.beginPath();
+ ctx.arc(9,10,2.5,0,Math.PI*2);
+ ctx.arc(21,10,2.5,0,Math.PI*2);
+ ctx.fill();
+
+ // Smile
+ ctx.strokeStyle="#06172c";
+ ctx.lineWidth=1.5;
+
+ ctx.beginPath();
+ ctx.arc(15,13,5,0.2,Math.PI-0.2);
+ ctx.stroke();
+
+ // Antenna
+ ctx.strokeStyle="#14d2e9";
+ ctx.lineWidth=2;
+
+ ctx.beginPath();
+ ctx.moveTo(15,0);
+ ctx.lineTo(15,-9);
+ ctx.stroke();
+
+ ctx.fillStyle="#14d2e9";
+
+ ctx.beginPath();
+ ctx.arc(15,-10,3,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.restore();
+}
+
+// Network obstacles
+function drawObstacle(o){
+
+ if(o.type===0){
+
+  // Router
+  ctx.fillStyle="#ffb84d";
+  ctx.fillRect(o.x,o.y+12,28,18);
+
+  ctx.strokeStyle="#ffb84d";
+  ctx.lineWidth=3;
+
+  ctx.beginPath();
+  ctx.moveTo(o.x+6,o.y+12);
+  ctx.lineTo(o.x+4,o.y);
+  ctx.moveTo(o.x+22,o.y+12);
+  ctx.lineTo(o.x+24,o.y);
+  ctx.stroke();
+
+  ctx.fillStyle="#06172c";
+  ctx.fillRect(o.x+7,o.y+19,4,3);
+  ctx.fillRect(o.x+18,o.y+19,4,3);
+
+ }else{
+
+  // Signal barrier
+  ctx.fillStyle="#ffb84d";
+  ctx.fillRect(o.x,o.y,22,30);
+
+  ctx.fillStyle="#ffe1a0";
+  ctx.fillRect(o.x+5,o.y+6,12,4);
+  ctx.fillRect(o.x+5,o.y+17,12,4);
+ }
+}
+
+// Draw game
+function draw(){
+
+ ctx.clearRect(0,0,w,h);
+
+ // Background stars
+ for(let i=0;i<20;i++){
+  ctx.fillStyle="rgba(255,255,255,.35)";
+  ctx.fillRect((i*83)%w,(i*37)%100,2,2);
+ }
+
+ // Ground
+ ctx.fillStyle="#14b9d2";
+ ctx.fillRect(0,h-12,w,2);
+
+ // Moving ground marks
+ ctx.fillStyle="#35617b";
+
+ for(let i=0;i<12;i++){
+  let x=(i*90-(frame*speed*.5)%90);
+  ctx.fillRect(x,h-8,25,2);
+ }
+
+ // Objects
+ if(player)drawPlayer();
+ obstacles.forEach(drawObstacle);
+
+ // Game over overlay
+ if(gameOver){
+
+  ctx.fillStyle="rgba(6,23,44,.85)";
+  ctx.fillRect(0,0,w,h);
+
+  ctx.textAlign="center";
+
+  ctx.fillStyle="#ffb84d";
+  ctx.font="bold 24px system-ui";
+  ctx.fillText("GAME OVER!",w/2,h/2-15);
+
+  ctx.fillStyle="#fff";
+  ctx.font="14px system-ui";
+  ctx.fillText("Tap or press SPACE to run again",w/2,h/2+15);
+ }
+}
+
+// Game loop
+function loop(){
+
+ if(!running)return;
+
+ frame++;
+
+ // Running animation
+ player.runFrame+=0.24+speed*.025;
+
+ // Gravity
+ player.velocity+=0.58;
+ player.y+=player.velocity;
+
+ // Ground collision
+ if(player.y>=h-48){
+  player.y=h-48;
+  player.velocity=0;
+  player.grounded=true;
+ }
+
+ // Generate obstacles
+ if(frame%95===0){
+  obstacles.push({
+   x:w+10,
+   y:h-42,
+   type:Math.random()>.5?0:1
+  });
+ }
+
+ // Move obstacles
+ obstacles.forEach(o=>{
+  o.x-=speed;
+ });
+
+ obstacles=obstacles.filter(o=>o.x>-50);
+
+ // Collision detection
+ for(const o of obstacles){
+
+  const obstacleHeight=30;
+  const obstacleWidth=o.type===0?28:22;
+  const obstacleY=o.y+(o.type===0?12:0);
+
+  if(
+   player.x+25>o.x+3 &&
+   player.x+5<o.x+obstacleWidth-3 &&
+   player.y+32>obstacleY+3 &&
+   player.y+3<obstacleY+obstacleHeight
+  ){
+   endGame();
+   return;
+  }
+ }
+
+ // Score and difficulty
+ score+=0.1;
+ speed=Math.min(11,4+score/100);
+
+ document.getElementById("score").textContent=
+ Math.floor(score);
+
+ draw();
+
+ animationId=requestAnimationFrame(loop);
+}
+
+// Game over
+function endGame(){
+
+ running=false;
+ gameOver=true;
+
+ const finalScore=Math.floor(score);
+
+ if(finalScore>best){
+  best=finalScore;
+  localStorage.setItem("risBest",best);
+ }
+
+ document.getElementById("best").textContent=best;
+
+ draw();
+}
+
+// Keyboard controls
+document.addEventListener("keydown",e=>{
+
+ if(e.code==="Space"||e.code==="ArrowUp"){
+  e.preventDefault();
+
+  if(!e.repeat)jump();
+ }
+});
+
+// Mobile controls
+canvas.addEventListener("pointerdown",e=>{
+ e.preventDefault();
+ jump();
+});
+
+// Resize
+window.addEventListener("resize",resize);
+
+// Initialize
+resize();
+reset();
+
+</script>
+
+</body>
+</html>
