@@ -1,0 +1,16 @@
+# Example FreeRADIUS PostgreSQL SQL module settings.
+# Copy into the SQL module configuration used by your installed FreeRADIUS release.
+# Confirm option names and pool syntax against that release's packaged example.
+sql {
+    driver = "rlm_sql_postgresql"
+    dialect = "postgresql"
+
+    server = "127.0.0.1"
+    port = 5432
+    login = "freeradius_app"
+    password = "REPLACE_WITH_A_LONG_RANDOM_DATABASE_PASSWORD"
+    radius_db = "ris"
+
+    # Use the full query file distributed with your exact FreeRADIUS version.
+    # Do not replace a production queries.conf with an arbitrary older release.
+}

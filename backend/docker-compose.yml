@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ris
+      POSTGRES_USER: ris
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in backend/.env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ris -d ris"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ris:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      RIS_ENV: production
+      RIS_DEV_SHOW_OTP: "false"
+      RIS_PAYMENT_MODE: live
+      HOST: 0.0.0.0
+      PORT: 8000
+      DATABASE_URL: postgresql://ris:${POSTGRES_PASSWORD}@db:5432/ris
+      RIS_ALLOWED_ORIGINS: ${RIS_ALLOWED_ORIGINS:-http://127.0.0.1:8000,http://localhost:8000}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  worker:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      RIS_ENV: production
+      RIS_DEV_SHOW_OTP: "false"
+      RIS_PAYMENT_MODE: live
+      DATABASE_URL: postgresql://ris:${POSTGRES_PASSWORD}@db:5432/ris
+      RIS_WORKER_INTERVAL_SECONDS: ${RIS_WORKER_INTERVAL_SECONDS:-60}
+    command: ["python", "worker.py"]
+    depends_on:
+      ris:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
